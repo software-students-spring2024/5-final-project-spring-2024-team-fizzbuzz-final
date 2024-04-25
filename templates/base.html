@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Micro+5&display=swap" rel="stylesheet">
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/logo.png') }}"
+    />
+  </head>
+  <body>
+    <div>
+      <header>
+        <ul>
+            <li><a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo"></a></li> 
+            <li><a href="/">Title</a></li>
+        </ul>
+      </header>
+
+        <nav class="navigation">
+          <ul>
+            {% if home %}
+            <li>
+              <a id="home" href="/" class="active">Home</a>
+            </li>
+            <li>
+              <a id="not-home" href="#">Not-Home</a>
+            </li>
+            {% else %}
+            <li>
+              <a id="home" href="/">Home</a>
+            </li>
+            <li>
+              <a id="not-home" href="#" class="active">Not Home</a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+
+      <main>{% block container %} {% endblock %}</main>
+      
+      <footer>
+        <div>
+          &copy; 2022. Shared under the GPL3 license. Source code available at
+          <a
+            href="https://github.com/software-students-spring2024/4-containerized-app-exercise-team-fizzbuzz-2/tree/main"
+            >available on Github</a
+          >.
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

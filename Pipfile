@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = {extras = ["async"], version = "*"}
+flask-socketio = "*"
+pytest = "*"
+python-dotenv = "*"
+pymongo = "*"
+
+[dev-packages]
+build = "*"
+pytest = "*"
+pytest-asyncio = "*"
+pylint = "*"
+black = "*"
+pytest-flask = "*"
+coverage = "*"
+
+[requires]
+python_version = "3.10"
+python_full_version = "3.10.10"
