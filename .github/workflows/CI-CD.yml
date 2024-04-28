@@ -32,7 +32,6 @@ jobs:
       
       - name: Install dependencies
         run: |
-          cd web-app
           touch .env
           echo MONGODB_USER=${{secrets.MONGODB_USER}} >> .env
           echo MONGODB_PASSWORD=${{secrets.MONGODB_PASSWORD}} >> .env
