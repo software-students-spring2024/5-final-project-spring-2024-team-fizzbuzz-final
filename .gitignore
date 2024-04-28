@@ -1,6 +1,9 @@
 # mac junk
 .DS_Store
 
+# Mongodb data volume
+mydata/
+
 # visual studio code junk
 .vscode/
 .vscode/settings.json

@@ -1,0 +1,208 @@
+* {
+    margin: 0;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+    /* font-family: "Micro 5", sans-serif; */
+    font-weight: 400;
+    font-style: normal;
+    font-family: "Courier", sans-serif;
+}
+
+html, body {
+    margin: 0 auto;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    background-color: rgb(250, 243, 243);
+}
+
+body {
+    height: 100%;
+}
+
+.start {
+    display: flex;
+    align-items:center;
+    width: 100%;
+    height: 100%;
+}
+
+form {
+    background-color: rgb(99, 41, 92);
+    width: min(450px,50%);
+    padding: 25px;
+    border: 5px solid rgb(45, 14, 41);
+    /* border-radius: 25px; */
+    font-size: xx-large;
+
+}
+
+form label {
+    color: white;
+}
+
+button {
+    margin: 10px;
+    font-size: x-large;
+    background-color: white;
+    color: rgb(99, 41, 92);
+    border: 5px solid rgb(45, 14, 41);
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+button:hover, button:active {
+    background-color: rgb(170, 110, 163);
+    color: white;
+}
+
+div {
+    text-align: center;
+}
+
+
+h1 {
+    text-align: center;
+    width: 50%;
+    color: rgb(99, 41, 92);
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.card-area {
+    width: 100%;
+    height: fit-content;
+    padding: 10px;    
+}
+
+.card {
+    padding: 5px;
+    display: inline-block;
+    height: 230px;
+    width: 360px;
+    border-radius: 5px;
+    border: 5px solid black;
+    background-color: white;
+    rotate: 0 0 1 0deg;
+}
+  
+.card-header {
+    font-size: large;
+    height: 10%;
+    text-align: left;
+}
+  
+.card-body {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    vertical-align: middle;
+    height: 90%;
+    font-size: xx-large;
+}
+
+header a {
+    color: hotpink;
+    text-decoration: none;
+}
+
+header a:hover {
+    color: rgb(99, 41, 92);
+}
+
+header a:active {
+    color: rgb(59, 17, 54);
+}
+
+header ul {
+    list-style-type: none;
+    overflow: hidden;
+    text-align: center;
+}
+
+header li {
+    display: inline;
+}
+
+header li a {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+header img {
+    vertical-align: middle;
+    height: 100px;
+}
+
+header {
+    text-align: center;
+    width: 100%;
+    height: fit-content;
+    padding: 0px;
+    margin:0;
+    line-height: 1.5;
+    background-color: rgb(240, 225, 228);
+    font-size: 100px;
+}
+
+/* Creating navigation bar */
+.navigation a.active {
+    background-color: white;
+}
+
+.navigation a:link, a:visited {
+    font-size: 36px;
+    background-color: grey;
+    color: rgb(99, 41, 92);
+    border: 10px solid rgb(99, 41, 92);
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.navigation a:hover, a:active {
+    background-color: rgb(170, 110, 163);
+    color: white;
+}
+
+.navigation {
+    margin: 18px;
+}
+
+.navigation ul {
+    list-style-type: none;
+    overflow: hidden;
+    text-align: center;
+}
+
+.navigation li {
+    display: inline;
+}
+
+.navigation li a {
+    display: inline-block;
+}
+
+.navigation li p {
+    display: inline-block;
+    padding: 10px;
+}
+
+table {
+    width: 80%;
+    font-size: 36px;
+    background-color: white;
+    color: rgb(99, 41, 92);
+    border: 10px solid rgb(99, 41, 92);
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;   
+}
