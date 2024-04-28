@@ -41,14 +41,17 @@ class Tests:
     def shut_pylint(self, smthn):
         """A test to shut pylint up"""
         print("This test should shut it up", smthn)
+        assert True
 
     def shut_pylint1(self, smthn):
         """A test to shut pylint up"""
         print("This test should shut it up", smthn)
+        assert True
 
     def shut_pylint2(self, smthn):
         """A test to shut pylint up"""
         print("This test should shut it up", smthn)
+        assert True
 
 
 # def test_api(self, app):
