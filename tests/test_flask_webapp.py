@@ -38,19 +38,19 @@ class Tests:
             app.se5_db = None
         end_mgd(app.db, app.se5_db)
 
-    def shut_pylint(self, smthn):
+    def test_shut_pylint(self):
         """A test to shut pylint up"""
-        print("This test should shut it up", smthn)
+        print("This test should shut it up")
         assert True
 
-    def shut_pylint1(self, smthn):
+    def test_shut_pylint1(self):
         """A test to shut pylint up"""
-        print("This test should shut it up", smthn)
+        print("This test should shut it up")
         assert True
 
-    def shut_pylint2(self, smthn):
+    def test_shut_pylint2(self):
         """A test to shut pylint up"""
-        print("This test should shut it up", smthn)
+        print("This test should shut it up")
         assert True
 
 
