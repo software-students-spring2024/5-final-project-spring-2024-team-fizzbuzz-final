@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block container %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/play.css') }}">
+    
+        <main> 
+            <section class = "guess-area">
+                <div class = "container">
+                    <h2> Guess! </h2>
+                    <div id = "guess-form">
+                        <input type = "text" id = "guess-input" placeholder = "Type your guess here">
+                        <button type = "submit">Submit</button>
+                    </div>
+                </div>
+            </section>
+         
+            <div class = "draw-messages-container">
+
+            <section class="game">
+                <div class="container">
+                    <h2>Drawing goes here!</h2>
+                    <canvas id="gameCanvas"></canvas>
+                </div>
+            </section>
+
+            <section class = "messaging-area">
+                <div class = "container">
+                    <h2>Chat</h2>
+                    <div id = "chat-messages">
+                        <!-- display chat messages here -->
+                    </div>
+                    <form id = "chat-form">
+                        <input type = "text" id = "chat-input" placeholder = "Type your message here">
+                        <button type = "submit">Send</button>
+                    </form>
+                </div>
+            </section>
+
+        </div>
+           
+        </main>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+        <script src="{{ url_for('static', filename='js/drawing.js') }}"></script>
+
+           
+
+        {% endblock %}
+        

@@ -1,47 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang = "en">
   <head>
-    <title>Title</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Micro+5&display=swap" rel="stylesheet">
-    <link
-      rel="icon"
-      href="{{ url_for('static', filename='img/logo.png') }}"
-    />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skribbl</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
   </head>
   <body>
-    <div>
+   
       <header>
-        <ul>
-            <li><a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo"></a></li> 
-            <li><a href="/">Title</a></li>
-        </ul>
+        <div class="container">
+          <div class="logo">
+              <img src="" alt="Skribbl.io Logo">
+              <h1>Skribbl.io</h1>
+          </div>
+          <nav class = "navigation">
+              <ul>
+                  <li><a href="#">Home</a></li>
+                  <li><a href="{{ url_for('play') }}">Play</a></li>
+                  <li><a href="#">How to Play</a></li>
+              </ul>
+          </nav>
+      </div>
       </header>
 
-        <nav class="navigation">
-          <ul>
-            {% if home %}
-            <li>
-              <a id="home" href="/" class="active">Home</a>
-            </li>
-            <li>
-              <a id="not-home" href="#">Not-Home</a>
-            </li>
-            {% else %}
-            <li>
-              <a id="home" href="/">Home</a>
-            </li>
-            <li>
-              <a id="not-home" href="#" class="active">Not Home</a>
-            </li>
-            {% endif %}
-          </ul>
-        </nav>
 
       <main>{% block container %} {% endblock %}</main>
       
@@ -49,11 +32,11 @@
         <div>
           &copy; 2022. Shared under the GPL3 license. Source code available at
           <a
-            href="https://github.com/software-students-spring2024/4-containerized-app-exercise-team-fizzbuzz-2/tree/main"
+            href="https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final"
             >available on Github</a
           >.
         </div>
       </footer>
-    </div>
+   
   </body>
 </html>
