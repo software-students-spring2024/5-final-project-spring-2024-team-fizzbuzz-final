@@ -16,13 +16,12 @@ config = dotenv_values(".env")
 
 async def connect_to_mongo(app):
     """
-    Connects to mongoDB asyncronously
+    Connects to mongoDB asyncronously..
     """
-
     mongo_uri = (
-        f'mongodb://{config["MONGODB_USER"]}:'
-        f'{config["MONGODB_PASSWORD"]}@{config["MONGODB_HOST"]}:'
-        f'{config["MONGODB_PORT"]}?authSource={config["MONGODB_AUTHSOURCE"]}'
+        f'mongodb+srv://{config["MONGODB_USER"]}:'
+        f'{config["MONGODB_PASSWORD"]}@{config["MONGODB_HOST"]}'
+        f'/{config["MONGODB_NAME"]}?retryWrites=true&w=majority&appName={config["MONGODB_NAME"]}'
     )
 
     # Make a connection to the database server
@@ -34,29 +33,30 @@ async def connect_to_mongo(app):
             "ping"
         )  # The ping command is cheap and does not require auth.
         print(" *", "Connected to MongoDB!")  # if we get here, the connection worked!
-    except pymongo.errors.OperationFailure as e:
+        app.connected = True
+    except pymongo.errors.OperationFailure as err:
         # the ping command failed, so the connection is not available.
-        print(" * MongoDB connection error:", e)  # debug
+        print(" * MongoDB connection error:", err)  # debug
+        app.connected = False
+        return None
 
     # Select a specific database on the server
-    db = connection[config["MONGODB_NAME"]]
+    dbase = connection[config["MONGODB_NAME"]]
 
-    print(db.test_collection.find_one({}))
-
-    if not db.nested_collections.find_one({"name": "SE_Project5"}):
-        db.nested_collections.insert_one({"name": "SE_Project5", "children": []})
-    se5_db = NestedCollection("SE_Project5", db)
+    if not dbase.nested_collections.find_one({"name": "SE_Project5"}):
+        dbase.nested_collections.insert_one({"name": "SE_Project5", "children": []})
+    se5_db = NestedCollection("SE_Project5", dbase)
 
     start_mgd(se5_db)
-    end_mgd(db, se5_db)
-    if not db.nested_collections.find_one({"name": "SE_Project5"}):
-        db.nested_collections.insert_one({"name": "SE_Project5", "children": []})
-    se5_db = NestedCollection("SE_Project5", db)
-    se5_db = NestedCollection("SE_Project5", db)
+    end_mgd(dbase, se5_db)
+    if not dbase.nested_collections.find_one({"name": "SE_Project5"}):
+        dbase.nested_collections.insert_one({"name": "SE_Project5", "children": []})
+
+    se5_db = NestedCollection("SE_Project5", dbase)
     start_mgd(se5_db)
 
-    app.connected = True
-    app.db = db
+    app.db = dbase
+    app.se5_db = se5_db
 
 
 def create_app():
@@ -91,6 +91,12 @@ def create_app():
         return render_template("play.html", play=True)
 
     return app
+
+    # @app.route("/test")
+    # def testing():
+    #     """ Shows testing page """
+    #     if not session.get("Associated_id"):
+    #         session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
 
 
 if __name__ == "__main__":
