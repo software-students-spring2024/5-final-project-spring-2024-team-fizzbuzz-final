@@ -21,7 +21,8 @@ async def connect_to_mongo(app):
     mongo_uri = (
         f'mongodb+srv://{config["MONGODB_USER"]}:'
         f'{config["MONGODB_PASSWORD"]}@{config["MONGODB_HOST"]}:'
-        f'p0mzmv3.mongodb.net/{config["MONGODB_DB"]}?authSource=retryWrites=true&w=majority&appName={config["MONGODB_NAME"]}'
+        f'p0mzmv3.mongodb.net/{config["MONGODB_DB"]}?authSource=retryWrites=true&'
+        f'w=majority&appName={config["MONGODB_NAME"]}'
     )
 
     # Make a connection to the database server
