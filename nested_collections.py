@@ -85,4 +85,3 @@ class NestedCollection:
         self.root_db.nested_collections.update_one(
             {"name": self.name}, {"$set": {"children": self.config["children"]}}
         )
-        return

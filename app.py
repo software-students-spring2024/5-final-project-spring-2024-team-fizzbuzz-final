@@ -18,11 +18,10 @@ async def connect_to_mongo(app):
     """
     Connects to mongoDB asyncronously
     """
-
     mongo_uri = (
-        f'mongodb://{config["MONGODB_USER"]}:'
+        f'mongodb+srv://{config["MONGODB_USER"]}:'
         f'{config["MONGODB_PASSWORD"]}@{config["MONGODB_HOST"]}:'
-        f'{config["MONGODB_PORT"]}?authSource={config["MONGODB_AUTHSOURCE"]}'
+        f'p0mzmv3.mongodb.net/{config["MONGODB_DB"]}?authSource=retryWrites=true&w=majority&appName={config["MONGODB_NAME"]}'
     )
 
     # Make a connection to the database server
@@ -35,28 +34,28 @@ async def connect_to_mongo(app):
         )  # The ping command is cheap and does not require auth.
         print(" *", "Connected to MongoDB!")  # if we get here, the connection worked!
         app.connected = True
-    except pymongo.errors.OperationFailure as e:
+    except pymongo.errors.OperationFailure as err:
         # the ping command failed, so the connection is not available.
-        print(" * MongoDB connection error:", e)  # debug
+        print(" * MongoDB connection error:", err)  # debug
         app.connected = False
         return None
 
     # Select a specific database on the server
-    db = connection[config["MONGODB_NAME"]]
+    dbase = connection[config["MONGODB_NAME"]]
 
-    if not db.nested_collections.find_one({"name": "SE_Project5"}):
-        db.nested_collections.insert_one({"name": "SE_Project5", "children": []})
-    se5_db = NestedCollection("SE_Project5", db)
+    if not dbase.nested_collections.find_one({"name": "SE_Project5"}):
+        dbase.nested_collections.insert_one({"name": "SE_Project5", "children": []})
+    se5_db = NestedCollection("SE_Project5", dbase)
 
     start_mgd(se5_db)
-    end_mgd(db, se5_db)
-    if not db.nested_collections.find_one({"name": "SE_Project5"}):
-        db.nested_collections.insert_one({"name": "SE_Project5", "children": []})
+    end_mgd(dbase, se5_db)
+    if not dbase.nested_collections.find_one({"name": "SE_Project5"}):
+        dbase.nested_collections.insert_one({"name": "SE_Project5", "children": []})
 
-    se5_db = NestedCollection("SE_Project5", db)
+    se5_db = NestedCollection("SE_Project5", dbase)
     start_mgd(se5_db)
 
-    app.db = db
+    app.db = dbase
     app.se5_db = se5_db
 
 

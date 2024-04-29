@@ -15,8 +15,9 @@ class Drawing:
 
     drawings: collection
 
+    # pylint: disable=too-many-arguments
     def __init__(
-        self,  # pylint: disable=too-many-arguments
+        self,
         prompt: AnyStr,
         drawer: AnyStr,
         guesser: AnyStr = None,

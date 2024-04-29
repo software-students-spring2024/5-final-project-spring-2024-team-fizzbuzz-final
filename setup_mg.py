@@ -19,7 +19,7 @@ def start_mgd(se5_db):
     Drawing.drawings = se5_db["drawings"]
 
 
-def end_mgd(db, se5_db):
+def end_mgd(dbase, se5_db):
     """
     delete all collections created
     """
@@ -33,6 +33,6 @@ def end_mgd(db, se5_db):
     se5_db.remove_collection("drawings")
     se5_db.remove_collections()
 
-    db.nested_collections.delete_one({"name": "SE_PROJECT5"})
+    dbase.nested_collections.delete_one({"name": "SE_PROJECT5"})
 
     return
