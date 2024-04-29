@@ -12,9 +12,9 @@ class Tests:
     """
 
     @pytest.fixture
-    def app(self):
+    def app_c(self):
         """
-        Creates an app
+        Creates an app (synchronously connect to mongodb).
         """
 
         app = create_app()
@@ -25,6 +25,7 @@ class Tests:
             }
         )
 
+        assert app is not None
         assert app.connected
 
         # other setup can go here
@@ -38,23 +39,37 @@ class Tests:
             app.se5_db = None
         end_mgd(app.db, app.se5_db)
 
+        self.stupid()
+
+    def stupid(self):
+        """most intelligent function"""
+        print(self, "Hola")
+
     def test_shut_pylint(self):
         """A test to shut pylint up"""
         print("This test should shut it up")
+        self.stupid()
         assert True
 
     def test_shut_pylint1(self):
         """A test to shut pylint up"""
         print("This test should shut it up")
+        self.stupid()
         assert True
 
     def test_shut_pylint2(self):
         """A test to shut pylint up"""
         print("This test should shut it up")
+        self.stupid()
         assert True
 
+    def test_mongo(self, app_c):
+        """test that mongodb is connected to"""
+        assert app_c.db is not None
+        self.stupid()
 
-# def test_api(self, app):
+
+# def test_api(self, app_c):
 #     """
 #     tests whether api works at creating app
 #     """

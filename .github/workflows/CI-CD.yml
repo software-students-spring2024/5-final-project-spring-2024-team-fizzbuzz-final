@@ -7,20 +7,20 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
-    services:
-      mongodb:
-        image: mongo:4.4.6
-        env:
-          MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGODB_USER }}
-          MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGODB_PASSWORD }} 
-          MONGO_INITDB_DATABASE: ${{ secrets.MONGODB_HOST }}
-        ports:
-          - 27017:27017
-        options:
-          --health-cmd mongo
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    # services:
+    #   mongodb:
+    #     image: mongo:4.4.6
+    #     env:
+    #       MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGODB_USER }}
+    #       MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGODB_PASSWORD }} 
+    #       MONGO_INITDB_DATABASE: ${{ secrets.MONGODB_HOST }}
+    #     ports:
+    #       - 27017:27017
+    #     options:
+    #       --health-cmd mongo
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
 
     steps:
       - uses: actions/checkout@v3
@@ -38,6 +38,8 @@ jobs:
           echo MONGODB_HOST=${{secrets.MONGODB_HOST}} >> .env
           echo MONGODB_PORT=${{secrets.MONGODB_PORT}} >> .env
           echo MONGODB_AUTHSOURCE=${{secrets.MONGODB_AUTHSOURCE}} >> .env
+          echo MONGODB_DB=${{secrets.MONGODB_DB}} >> .env
+          echo MONGODB_NAME=${{secrets.MONGODB_NAME}} >> .env
           echo WEBAPP_FLASK_PORT=${{ secrets.WEBAPP_FLASK_PORT }} >> .env
           echo WEBAPP_FLASK_APP=${{ secrets.WEBAPP_FLASK_APP }} >> .env
           echo WEBAPP_FLASK_ENV=${{ secrets.WEBAPP_FLASK_ENV }} >> .env
