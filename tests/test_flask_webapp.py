@@ -14,7 +14,7 @@ class Tests:
     @pytest.fixture
     def app_c(self):
         """
-        Creates an app (synchronously connect to mongodb)
+        Creates an app (synchronously connect to mongodb).
         """
 
         app = create_app()
