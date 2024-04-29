@@ -16,7 +16,7 @@ config = dotenv_values(".env")
 
 async def connect_to_mongo(app):
     """
-    Connects to mongoDB asyncronously
+    Connects to mongoDB asyncronously..
     """
     mongo_uri = (
         f'mongodb+srv://{config["MONGODB_USER"]}:'
