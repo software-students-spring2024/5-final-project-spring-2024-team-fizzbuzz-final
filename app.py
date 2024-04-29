@@ -34,9 +34,12 @@ async def connect_to_mongo(app):
             "ping"
         )  # The ping command is cheap and does not require auth.
         print(" *", "Connected to MongoDB!")  # if we get here, the connection worked!
+        app.connected = True
     except pymongo.errors.OperationFailure as e:
         # the ping command failed, so the connection is not available.
         print(" * MongoDB connection error:", e)  # debug
+        app.connected = False
+        return None
 
     # Select a specific database on the server
     db = connection[config["MONGODB_NAME"]]
@@ -53,7 +56,6 @@ async def connect_to_mongo(app):
     se5_db = NestedCollection("SE_Project5", db)
     start_mgd(se5_db)
 
-    app.connected = True
     app.db = db
     app.se5_db = se5_db
 
@@ -82,7 +84,7 @@ def create_app():
             print("Generating new session id")
 
         return render_template("home.html", home=True)
-            
+
     return app
 
     # @app.route("/test")
@@ -90,6 +92,7 @@ def create_app():
     #     """ Shows testing page """
     #     if not session.get("Associated_id"):
     #         session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
+
 
 if __name__ == "__main__":
     flask_app = create_app()

@@ -7,6 +7,7 @@ from typing import Dict, AnyStr, List
 from bson.objectid import ObjectId
 from pymongo import collection
 
+
 class Drawing:
     """
     Class implementation for Drawing
@@ -14,13 +15,15 @@ class Drawing:
 
     drawings: collection
 
-    def __init__(self, # pylint: disable=too-many-arguments
+    def __init__(
+        self,  # pylint: disable=too-many-arguments
         prompt: AnyStr,
         drawer: AnyStr,
         guesser: AnyStr = None,
         drawing: List = None,
         time_to_guess: float = None,
-        idef: ObjectId = None):
+        idef: ObjectId = None,
+    ):
         """
         initialize drawing
         """

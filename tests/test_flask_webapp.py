@@ -23,6 +23,7 @@ class Tests:
             {"TESTING": True,}
         )
 
+        assert app is not None
         assert app.connected
 
         # other setup can go here
@@ -50,8 +51,9 @@ class Tests:
         """A test to shut pylint up"""
         print("This test should shut it up")
         assert True
-    
-    def test_mongo(self, app_c):
+
+    def test_mongo(self, app_c):  # pylint: disable=no-self-use
+        """ test that mongodb is connected to """
         assert app_c.db is not None
 
 
