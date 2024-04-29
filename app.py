@@ -89,10 +89,8 @@ def create_app():
         shows play page
         """
         return render_template("play.html", play=True)
-    
-    return app
-    
 
+    return app
 
 
 if __name__ == "__main__":
