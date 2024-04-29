@@ -67,19 +67,19 @@ def create_app():
     app = Flask(__name__)
     app.secret_key = config["WEBAPP_FLASK_SECRET_KEY"]
 
-    app.connected = False
+    # app.connected = False
 
-    app.ensure_sync(connect_to_mongo)(app)
+    # app.ensure_sync(connect_to_mongo)(app)
 
     @app.route("/")
     def home():
         """
         shows home page
         """
-        if not session.get("associated_id"):
-            session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
-            print(session["associated_id"].get("$oid"))
-            print("Generating new session id")
+        # if not session.get("associated_id"):
+        #     session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
+        #     print(session["associated_id"].get("$oid"))
+        #     print("Generating new session id")
 
         return render_template("home.html", home=True)
 

@@ -5,6 +5,13 @@ const canvas = new fabric.Canvas('gameCanvas', {
 
 canvas.setDimensions({ width: 800, height: 400 });
 
+const clearButton = document.getElementById('clearButton');
+
+clearButton.addEventListener('click', function() {
+
+    canvas.clear();
+});
+
 
 
 canvas.on('mouse:down', function(options) {
@@ -15,21 +22,6 @@ canvas.on('mouse:down', function(options) {
     console.log('Mouse down at coordinates:', x, y);
 });
 
-canvas.on('mouse:move', function(options) {
-   
-    // if (options.e.buttons === 1) {
-    //     const pointer = canvas.getPointer(options.e);
-    //     const x = pointer.x;
-    //     const y = pointer.y;
-    //     console.log('Mouse move at coordinates:', x, y);
-    //     draw(x, y);
-    // }
-});
-
-canvas.on('mouse:up', function(options) {
-    // Handle mouse up event
-    console.log('Mouse up');
-});
 
 // Function to draw on the canvas
 function draw(x, y) {
