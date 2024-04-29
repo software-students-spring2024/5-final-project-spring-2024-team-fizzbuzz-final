@@ -67,9 +67,9 @@ def create_app():
     app = Flask(__name__)
     app.secret_key = config["WEBAPP_FLASK_SECRET_KEY"]
 
-    # app.connected = False
+    app.connected = False
 
-    # app.ensure_sync(connect_to_mongo)(app)
+    app.ensure_sync(connect_to_mongo)(app)
 
     @app.route("/")
     def home():
