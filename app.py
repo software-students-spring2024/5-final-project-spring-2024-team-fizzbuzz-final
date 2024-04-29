@@ -76,13 +76,19 @@ def create_app():
         """
         shows home page
         """
-
         if not session.get("associated_id"):
             session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
             print(session["associated_id"].get("$oid"))
             print("Generating new session id")
 
         return render_template("home.html", home=True)
+
+    @app.route("/play")
+    def play():
+        """
+        shows play page
+        """
+        return render_template("play.html", play=True)
 
     return app
 

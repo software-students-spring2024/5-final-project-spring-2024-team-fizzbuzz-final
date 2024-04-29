@@ -1,0 +1,49 @@
+main {
+    display : flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.draw-messages-container {
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+    margin: 20px;
+    justify-content: center;
+}
+
+
+.game {
+    width: 70%;
+    margin-right: 20px;
+    padding: 20px;
+    flex: 1;
+
+}
+
+
+
+#gameCanvas {
+    border: 2px solid #000;
+    height: 700px;
+    width: 100%;
+    background-color: white;
+}
+
+
+
+.messaging-area {
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #000;
+    margin-left: 20px;
+    width: 20%;
+    margin-left: auto;
+}
+
+
+.guess-area {
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #000;
+}
