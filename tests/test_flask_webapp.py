@@ -12,7 +12,7 @@ class Tests:
     """
 
     @pytest.fixture
-    def app(self):
+    def app_c(self):  # pylint: disable=no-self-use
         """
         Creates an app
         """
@@ -20,9 +20,7 @@ class Tests:
         app = create_app()
 
         app.config.update(
-            {
-                "TESTING": True,
-            }
+            {"TESTING": True,}
         )
 
         assert app.connected
@@ -38,23 +36,26 @@ class Tests:
             app.se5_db = None
         end_mgd(app.db, app.se5_db)
 
-    def test_shut_pylint(self):
+    def test_shut_pylint(self):  # pylint: disable=no-self-use
         """A test to shut pylint up"""
         print("This test should shut it up")
         assert True
 
-    def test_shut_pylint1(self):
+    def test_shut_pylint1(self):  # pylint: disable=no-self-use
         """A test to shut pylint up"""
         print("This test should shut it up")
         assert True
 
-    def test_shut_pylint2(self):
+    def test_shut_pylint2(self):  # pylint: disable=no-self-use
         """A test to shut pylint up"""
         print("This test should shut it up")
         assert True
+    
+    def test_mongo(self, app_c):
+        assert app_c.db is not None
 
 
-# def test_api(self, app):
+# def test_api(self, app_c):
 #     """
 #     tests whether api works at creating app
 #     """

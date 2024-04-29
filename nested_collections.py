@@ -73,3 +73,16 @@ class NestedCollection:
         check if collection by pseydonym exists
         """
         return pseudonym in self.dict
+    
+    def remove_collections(self) -> None:
+        """
+        removes all collections
+        """
+
+        self.dict = {}
+        self.config["children"] = []
+        
+        self.root_db.nested_collections.update_one(
+            {"name": self.name}, {"$set": {"children": self.config["children"]}}
+        )
+        return

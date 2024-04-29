@@ -41,8 +41,6 @@ async def connect_to_mongo(app):
     # Select a specific database on the server
     db = connection[config["MONGODB_NAME"]]
 
-    print(db.test_collection.find_one({}))
-
     if not db.nested_collections.find_one({"name": "SE_Project5"}):
         db.nested_collections.insert_one({"name": "SE_Project5", "children": []})
     se5_db = NestedCollection("SE_Project5", db)
@@ -51,12 +49,13 @@ async def connect_to_mongo(app):
     end_mgd(db, se5_db)
     if not db.nested_collections.find_one({"name": "SE_Project5"}):
         db.nested_collections.insert_one({"name": "SE_Project5", "children": []})
-    se5_db = NestedCollection("SE_Project5", db)
+
     se5_db = NestedCollection("SE_Project5", db)
     start_mgd(se5_db)
 
     app.connected = True
     app.db = db
+    app.se5_db = se5_db
 
 
 def create_app():
@@ -83,9 +82,14 @@ def create_app():
             print("Generating new session id")
 
         return render_template("home.html", home=True)
-
+            
     return app
 
+    # @app.route("/test")
+    # def testing():
+    #     """ Shows testing page """
+    #     if not session.get("Associated_id"):
+    #         session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
 
 if __name__ == "__main__":
     flask_app = create_app()
