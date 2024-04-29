@@ -40,7 +40,7 @@ class Tests:
         self.stupid()
 
     def stupid(self):
-        """ most intelligent function """
+        """most intelligent function"""
         print(self, "Hola")
 
     def test_shut_pylint(self):
@@ -62,7 +62,7 @@ class Tests:
         assert True
 
     def test_mongo(self, app_c):
-        """ test that mongodb is connected to """
+        """test that mongodb is connected to"""
         assert app_c.db is not None
         self.stupid()
 
