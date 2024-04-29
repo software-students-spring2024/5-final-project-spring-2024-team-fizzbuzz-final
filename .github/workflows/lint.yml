@@ -21,7 +21,7 @@ jobs:
         # you may set pylint to ignore any files or dependencies that make no sense to lint
         run: |
           pipenv run pylint **/*.py
-          
+
       - name: Format with black
         # you may set black to ignore any files or dependencies that make no sense to format
         run: |
