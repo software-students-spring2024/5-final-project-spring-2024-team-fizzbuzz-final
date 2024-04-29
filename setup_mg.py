@@ -11,7 +11,7 @@ config = dotenv_values(".env")
 
 def start_mgd(se5_db):
     """
-    set up collectionss
+    set up collections!
     """
 
     if "drawings" not in se5_db:
