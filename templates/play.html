@@ -7,10 +7,11 @@
             <section class = "guess-area">
                 <div class = "container">
                     <h2> Guess! </h2>
-                    <div id = "guess-form">
+                    <form id = "guess-form">
                         <input type = "text" id = "guess-input" placeholder = "Type your guess here">
                         <button type = "submit">Submit</button>
-                    </div>
+                    </form>
+                    <div id="result" style="display: none;"></div>
                 </div>
             </section>
          
@@ -45,6 +46,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-3.0.4.min.js"></script>
         <script src="{{ url_for('static', filename='js/drawing.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/guessing.js') }}"></script>
         
 
            

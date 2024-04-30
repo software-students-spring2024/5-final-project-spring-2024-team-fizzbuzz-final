@@ -16,6 +16,9 @@ config = dotenv_values(".env")
 ## create a socketio object
 socketio = SocketIO()
 
+## use the word apple for guessing temporarily
+curr_word = "apple"
+
 ROOM_SIZE = 2
 
 
@@ -207,6 +210,25 @@ def create_app():
     @socketio.on("disconnect", namespace="/play")
     def handle_disconnect():
         print("Client disconnected")
+
+    @socketio.on("submit_guess")
+    def handle_guess(data):
+        """
+        Handles the guess
+        """
+        guess = data["guess"].lower().strip()
+        is_correct = guess == curr_word
+
+        if is_correct:
+            response_message = "Correct!"
+        else:
+            response_message = "Incorrect!"
+
+        emit(
+            "guess",
+            {"message": response_message, "is_correct": is_correct},
+            room=request.sid,
+        )
 
     return app
 
