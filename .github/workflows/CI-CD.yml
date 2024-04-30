@@ -80,6 +80,15 @@ jobs:
         with:
           build-args: |
             MONGODB_USER=${{secrets.MONGODB_USER}}
+            MONGODB_PASSWORD=${{secrets.MONGODB_PASSWORD}}
+            MONGODB_HOST=${{secrets.MONGODB_HOST}}
+            MONGODB_PORT=${{secrets.MONGODB_PORT}}
+            MONGODB_AUTHSOURCE=${{secrets.MONGODB_AUTHSOURCE}}
+            MONGODB_NAME=${{secrets.MONGODB_NAME}}
+            WEBAPP_FLASK_PORT=${{ secrets.WEBAPP_FLASK_PORT }}
+            WEBAPP_FLASK_APP=${{ secrets.WEBAPP_FLASK_APP }}
+            WEBAPP_FLASK_ENV=${{ secrets.WEBAPP_FLASK_ENV }}
+            WEBAPP_FLASK_SECRET_KEY=${{ secrets.WEBAPP_FLASK_SECRET_KEY }}
           context: ./
           file: ./Dockerfile
           push: true
