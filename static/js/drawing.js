@@ -1,4 +1,18 @@
+var socket = io.connect('http://' + document.domain + ':' + location.port);
+var isDrawing = false;
+var lastX, lastY;
+let path = null;
 
+socket.on('connect', function() {
+    console.log('Websocket has connected to the server!');
+
+});
+socket.on('drawing', function(data) {
+    draw(data.x, data.y);
+});
+socket.on('canvas_cleared', function() {
+    canvas.clear();
+});
 const canvas = new fabric.Canvas('gameCanvas', {
     isDrawingMode: true 
 });
@@ -10,37 +24,66 @@ const clearButton = document.getElementById('clearButton');
 clearButton.addEventListener('click', function() {
 
     canvas.clear();
+    socket.emit('canvas_cleared');
 });
 
 
 
+// keeps track of the mouse's most recent position
 canvas.on('mouse:down', function(options) {
-    
+    isDrawing = true;
+    // use the canvas's getPointer method to get the x and y coordinates of the mouse
     const pointer = canvas.getPointer(options.e);
-    const x = pointer.x;
-    const y = pointer.y;
-    console.log('Mouse down at coordinates:', x, y);
-});
 
-
-// Function to draw on the canvas
-function draw(x, y) {
-    if (!isDrawing) return;
-
-    if (!lastX || !lastY) {
-        lastX = x;
-        lastY = y;
-    }
-
-    const line = new fabric.Line([lastX, lastY, x, y], {
-        fill: 'black',
+    // create a path starting at the x and y coords of the mouse
+    path = new fabric.Path(`M ${pointer.x} ${pointer.y}`, {
+        fill: null,
         stroke: 'black',
         strokeWidth: 2,
-        selectable: true,
-    });
-    canvas.add(line);
+        selectable: false,
+        
+    
+        });
+    
+    // add the path to the canvas
+    canvas.add(path);
+
+    
+    // log that the mouse has been pressed down
+    console.log('Mouse down at coordinates:', pointer.x, pointer.y);
+});
+
+// when the mouse is moving, use the socket to emit the x and y coordinates to the server
+canvas.on('mouse:move', function(options) {
+    if (!isDrawing || !path ) return;
+    // use the canvas's getPointer method to get the x and y coordinates of the mouse
+    const pointer = canvas.getPointer(options.e);
+    // add points to the path as the mouse moves
+    path.path.push(['L', pointer.x, pointer.y]);
+
+    //render the canvas
     canvas.renderAll();
 
-    lastX = x;
-    lastY = y;
-}
+    // emit the x and y coordinates of the mouse to the server
+    socket.emit('drawing', { x: pointer.x, y: pointer.y });
+
+    
+
+});
+
+canvas.on('mouse:up', function(options) {
+
+    // if a path exists, set the coordinates of the path to the canvas and set the path to null using the setCoords method
+    // the setCoords method updates the coordinates of the path and sets the path to null
+    if (path) {
+        path.setCoords();
+    }
+
+    isDrawing = false;
+
+});
+
+canvas.on('mouse:out', function() {
+    isDrawing = false;
+});
+

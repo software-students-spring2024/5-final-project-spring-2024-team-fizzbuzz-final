@@ -10,8 +10,13 @@ from flask import Flask, render_template, session
 from dotenv import dotenv_values
 from nested_collections import NestedCollection
 from setup_mg import end_mgd, start_mgd
+from flask_socketio import SocketIO
 
 config = dotenv_values(".env")
+
+## create a socketio object
+socketio = SocketIO()
+
 
 
 async def connect_to_mongo(app):
@@ -58,6 +63,8 @@ async def connect_to_mongo(app):
     app.db = dbase
     app.se5_db = se5_db
 
+    
+
 
 def create_app():
     """
@@ -66,6 +73,12 @@ def create_app():
     # Make flask app
     app = Flask(__name__)
     app.secret_key = config["WEBAPP_FLASK_SECRET_KEY"]
+
+
+    # attach socketio to the app
+    socketio.init_app(app)
+
+   
 
     # app.connected = False
 
@@ -89,6 +102,24 @@ def create_app():
         shows play page
         """
         return render_template("play.html", play=True)
+    
+    @socketio.on("connect")
+    def handle_connect():
+        print("Client connected")
+
+
+    @socketio.on("drawing")
+    def handle_drawing(data):
+        """
+        Handles drawing data
+        """
+        print(data)
+        # broadcast the drawing data, to all clients
+        socketio.emit("drawing", data)
+    
+    @socketio.on("disconnect")
+    def handle_disconnect():
+        print("Client disconnected")
 
     return app
 
@@ -101,4 +132,4 @@ def create_app():
 
 if __name__ == "__main__":
     flask_app = create_app()
-    flask_app.run(port=config["WEBAPP_FLASK_PORT"])
+    socketio.run(flask_app, host='0.0.0.0', port=config["WEBAPP_FLASK_PORT"], debug=True)
