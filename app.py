@@ -17,6 +17,9 @@ config = dotenv_values(".env")
 ## create a socketio object
 socketio = SocketIO()
 
+## use the word apple for guessing temporarily
+curr_word = "apple"
+
 
 async def connect_to_mongo(app):
     """
@@ -121,6 +124,21 @@ def create_app():
     @socketio.on("disconnect")
     def handle_disconnect():
         print("Client disconnected")
+
+    @socketio.on("submit_guess")
+    def handle_guess(data):
+        """
+        Handles the guess
+        """
+        guess = data['guess'].lower().strip()
+        is_correct = ( guess == curr_word )
+
+        if is_correct:
+            response_message = "Correct!"
+        else:
+            response_message = "Incorrect!"
+        
+        emit("guess", {"message": response_message, "is_correct": is_correct}, broadcast=True)
 
     return app
 
