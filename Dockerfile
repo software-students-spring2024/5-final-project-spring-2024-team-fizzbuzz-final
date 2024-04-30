@@ -10,12 +10,36 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip3 install -r requirements.txt
 
+ARG MONGODB_USER
+ARG MONGODB_PASSWORD
+ARG MONGODB_HOST
+ARG MONGODB_PORT
+ARG MONGODB_AUTHSOURCE
+ARG MONGODB_DB
+ARG MONGODB_NAME
+ARG WEBAPP_FLASK_PORT
+ARG WEBAPP_FLASK_APP
+ARG WEBAPP_FLASK_ENV
+ARG WEBAPP_FLASK_SECRET_KEY
+
+RUN echo MONGODB_USER=$MONGODB_USER >> .env
+RUN echo MONGODB_PASSWORD=$MONGODB_PASSWORD >> .env
+RUN echo MONGODB_HOST=$MONGODB_HOST >> .env
+RUN echo MONGODB_PORT=$MONGODB_PORT >> .env
+RUN echo MONGODB_AUTHSOURCE=$MONGODB_AUTHSOURCE >> .env
+RUN echo MONGODB_DB=$MONGODB_DB >> .env
+RUN echo MONGODB_NAME=$MONGODB_NAME >> .env
+RUN echo WEBAPP_FLASK_PORT=$WEBAPP_FLASK_PORT  >> .env
+RUN echo WEBAPP_FLASK_APP=$WEBAPP_FLASK_APP  >> .env
+RUN echo WEBAPP_FLASK_ENV=$WEBAPP_FLASK_ENV  >> .env
+RUN echo WEBAPP_FLASK_SECRET_KEY=$WEBAPP_FLASK_SECRET_KEY  >> .env
+
 # the ADD command is how you add files from your local machine into a Docker image
 # Copy the current directory contents into the container at /app
 ADD . .
 
-# expose the port that the Flask app is running on... by default 5000
-EXPOSE 5000
+# expose the port that the Flask app is running on... by default 80
+EXPOSE 8080
 
 # Run app.py when the container launches
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "-p", "5000"]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "-p", "8080"]

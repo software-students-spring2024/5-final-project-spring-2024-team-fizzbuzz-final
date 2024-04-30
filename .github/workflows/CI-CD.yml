@@ -38,7 +38,6 @@ jobs:
           echo MONGODB_HOST=${{secrets.MONGODB_HOST}} >> .env
           echo MONGODB_PORT=${{secrets.MONGODB_PORT}} >> .env
           echo MONGODB_AUTHSOURCE=${{secrets.MONGODB_AUTHSOURCE}} >> .env
-          echo MONGODB_DB=${{secrets.MONGODB_DB}} >> .env
           echo MONGODB_NAME=${{secrets.MONGODB_NAME}} >> .env
           echo WEBAPP_FLASK_PORT=${{ secrets.WEBAPP_FLASK_PORT }} >> .env
           echo WEBAPP_FLASK_APP=${{ secrets.WEBAPP_FLASK_APP }} >> .env
@@ -79,8 +78,25 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
+          build-args: |
+            MONGODB_USER=${{secrets.MONGODB_USER}}
+            MONGODB_PASSWORD=${{secrets.MONGODB_PASSWORD}}
+            MONGODB_HOST=${{secrets.MONGODB_HOST}}
+            MONGODB_PORT=${{secrets.MONGODB_PORT}}
+            MONGODB_AUTHSOURCE=${{secrets.MONGODB_AUTHSOURCE}}
+            MONGODB_NAME=${{secrets.MONGODB_NAME}}
+            WEBAPP_FLASK_PORT=${{ secrets.WEBAPP_FLASK_PORT }}
+            WEBAPP_FLASK_APP=${{ secrets.WEBAPP_FLASK_APP }}
+            WEBAPP_FLASK_ENV=${{ secrets.WEBAPP_FLASK_ENV }}
+            WEBAPP_FLASK_SECRET_KEY=${{ secrets.WEBAPP_FLASK_SECRET_KEY }}
           context: ./
           file: ./Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: DigitalOcean App Platform deployment
+        uses: digitalocean/app_action@v1.1.5
+        with:
+          app_name: fizzbuzz-draw
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
