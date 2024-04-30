@@ -1,15 +1,17 @@
-var socket = io.connect('http://' + document.domain + ':' + location.port);
-var isDrawing = false;
-var lastX, lastY;
+let socket = io.connect('/play');
+let isDrawing = false;
+let lastX, lastY;
 let path = null;
 
 socket.on('connect', function() {
     console.log('Websocket has connected to the server!');
 
 });
+
 socket.on('canvas_cleared', function() {
     canvas.clear();
 });
+
 socket.on('drawing', function(data) {
     let receivedPath = new fabric.Path(data.path, {
         fill: null,
@@ -34,8 +36,6 @@ clearButton.addEventListener('click', function() {
     canvas.clear();
     socket.emit('canvas_cleared');
 });
-
-
 
 // keeps track of the mouse's most recent position
 canvas.on('mouse:down', function(options) {

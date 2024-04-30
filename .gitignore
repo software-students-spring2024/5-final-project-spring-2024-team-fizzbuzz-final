@@ -3,6 +3,7 @@
 
 # virtual environment 
 /myenv/
+myenv/
 
 # Mongodb data volume
 mydata/
