@@ -38,7 +38,6 @@ jobs:
           echo MONGODB_HOST=${{secrets.MONGODB_HOST}} >> .env
           echo MONGODB_PORT=${{secrets.MONGODB_PORT}} >> .env
           echo MONGODB_AUTHSOURCE=${{secrets.MONGODB_AUTHSOURCE}} >> .env
-          echo MONGODB_DB=${{secrets.MONGODB_DB}} >> .env
           echo MONGODB_NAME=${{secrets.MONGODB_NAME}} >> .env
           echo WEBAPP_FLASK_PORT=${{ secrets.WEBAPP_FLASK_PORT }} >> .env
           echo WEBAPP_FLASK_APP=${{ secrets.WEBAPP_FLASK_APP }} >> .env
