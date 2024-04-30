@@ -94,3 +94,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: DigitalOcean App Platform deployment
+        uses: digitalocean/app_action@v1.1.5
+        with:
+          app_name: fizzbuzz-draw
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
