@@ -130,15 +130,19 @@ def create_app():
         """
         Handles the guess
         """
-        guess = data['guess'].lower().strip()
-        is_correct = ( guess == curr_word )
+        guess = data["guess"].lower().strip()
+        is_correct = guess == curr_word
 
         if is_correct:
             response_message = "Correct!"
         else:
             response_message = "Incorrect!"
-        
-        emit("guess", {"message": response_message, "is_correct": is_correct}, broadcast=True)
+
+        emit(
+            "guess",
+            {"message": response_message, "is_correct": is_correct},
+            broadcast=True,
+        )
 
     return app
 
