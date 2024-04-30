@@ -4,13 +4,12 @@ Web-app
 
 import json
 import pymongo
-from bson.objectid import ObjectId
-from bson import json_util
-from flask import Flask, render_template, session, request
+from flask_socketio import SocketIO, emit, join_room
+from bson import json_util, objectid
+from flask import Flask, render_template, session, request, redirect, url_for
 from dotenv import dotenv_values
 from nested_collections import NestedCollection
 from setup_mg import end_mgd, start_mgd
-from flask_socketio import SocketIO, emit
 
 config = dotenv_values(".env")
 
@@ -19,6 +18,8 @@ socketio = SocketIO()
 
 ## use the word apple for guessing temporarily
 curr_word = "apple"
+
+ROOM_SIZE = 2
 
 
 async def connect_to_mongo(app):
@@ -81,13 +82,15 @@ def create_app():
 
     app.ensure_sync(connect_to_mongo)(app)
 
+    app.rooms = {}
+
     @app.route("/")
     def home():
         """
         shows home page
         """
         if not session.get("associated_id"):
-            session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
+            session["associated_id"] = json.loads(json_util.dumps(objectid.ObjectId()))
             print(session["associated_id"].get("$oid"))
             print("Generating new session id")
 
@@ -100,28 +103,111 @@ def create_app():
         """
         return render_template("play.html", play=True)
 
-    @socketio.on("connect")
+    @app.route("/join-game", methods=["GET", "POST"])
+    def join_game():
+        """Page with all possible rooms"""
+
+        if request.args.get("room"):
+            session["room"] = request.args.get("room")
+            return redirect(url_for("waiting_room"))
+
+        full_rooms = app.se5_db["rooms"].find({"count": ROOM_SIZE})
+        free_rooms = app.se5_db["rooms"].find({"count": {"$lt": ROOM_SIZE}})
+
+        if request.method == "GET":
+            return render_template(
+                "join-game.html", full_rooms=full_rooms, free_rooms=free_rooms
+            )
+
+        if request.method == "POST":
+            if app.se5_db["rooms"].find_one({"name": request.form["room"]}):
+                print("already exists")
+                return redirect(
+                    url_for(
+                        "join_game",
+                        full_rooms=full_rooms,
+                        free_rooms=free_rooms,
+                        error="room already exists",
+                    )
+                )
+            session["room"] = request.form["room"]
+            app.se5_db["rooms"].insert_one({"name": request.form["room"], "count": 0})
+            return redirect(url_for("waiting_room"))
+
+        return redirect(
+            url_for(
+                "join_game",
+                full_rooms=full_rooms,
+                free_rooms=free_rooms,
+                error="Unexpected error",
+            )
+        )
+
+    @app.route("/waiting-room")
+    def waiting_room():
+        """Waiting room page"""
+        return render_template("waiting.html", room=session["room"])
+
+    @socketio.on("connect", namespace="/waiting")
+    def handle_waiting_connect():
+        """Send socket event ready when waiting room full"""
+        room = session["room"]
+
+        app.se5_db: NestedCollection = app.se5_db  # type: ignore
+        app.se5_db["rooms"].update_one(
+            {"name": room}, {"$inc": {"count": 1}, "$set": {"name": room}}
+        )
+
+        emit("assigned-room", {"room": room}, broadcast=False, namespace="/waiting")
+        if app.se5_db["rooms"].find_one({"name": room})["count"] == ROOM_SIZE:
+            print(f"sufficient people... ready to start room {room}")
+            emit(
+                "ready",
+                {"message": f"{room} is ready", "room": room},
+                broadcast=True,
+                namespace="/waiting",
+            )
+
+    @socketio.on("connect", namespace="/play")
     def handle_connect():
         print("Client connected")
+        username = session["associated_id"]
+        room = session["room"]
+        join_room(room)
+        print(username, "joined", room)
+        emit(
+            "new-player",
+            {"message": f"{username} joined {room}"},
+            broadcast=True,
+            namespace="/play",
+            to=room,
+        )
 
-    @socketio.on("drawing")
+    @socketio.on("drawing", namespace="/play")
     def handle_drawing(data):
         """
         Handles drawing data
         """
-        print(data)
+        # print(data)
         # broadcast the drawing data, to all clients
-        emit("drawing", data, broadcast=True, include_self=False)
+        emit(
+            "drawing",
+            data,
+            broadcast=True,
+            include_self=False,
+            namespace="/play",
+            to=session["room"],
+        )
 
-    @socketio.on("canvas_cleared")
+    @socketio.on("canvas_cleared", namespace="/play")
     def handle_clear():
         """
         Handles clearing the canvas
         """
         print("Clearing canvas")
-        emit("canvas_cleared", broadcast=True)
+        emit("canvas_cleared", broadcast=True, namespace="/play", to=session["room"])
 
-    @socketio.on("disconnect")
+    @socketio.on("disconnect", namespace="/play")
     def handle_disconnect():
         print("Client disconnected")
 
@@ -145,12 +231,6 @@ def create_app():
         )
 
     return app
-
-    @app.route("/test")
-    def testing():
-        """Shows testing page"""
-        if not session.get("Associated_id"):
-            session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
 
 
 if __name__ == "__main__":

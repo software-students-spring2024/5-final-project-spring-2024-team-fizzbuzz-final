@@ -45,12 +45,14 @@ class NestedCollection:
             {"name": self.name}, {"$set": {"children": self.config["children"]}}
         )
 
-    def remove_collection(self, pseudonym: AnyStr) -> None:
+    def remove_collection(self, pseudonym: AnyStr, drop=True) -> None:
         """
         remove a collection
         """
         for i in range(len(self.config["children"])):
             if self.config["children"][i][0] == pseudonym:
+                if drop:
+                    self[pseudonym].drop()
                 del self.dict[pseudonym]
                 self.config["children"].pop(i)
                 self.root_db.nested_collections.update_one(

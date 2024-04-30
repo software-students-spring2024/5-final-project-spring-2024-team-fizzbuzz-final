@@ -18,6 +18,9 @@ def start_mgd(se5_db):
         se5_db.add_collection("drawings", "SE_PROJECT5_drawings")
     Drawing.drawings = se5_db["drawings"]
 
+    if "rooms" not in se5_db:
+        se5_db.add_collection("rooms", "SE_PROJECT5_rooms")
+
 
 def end_mgd(dbase, se5_db):
     """
@@ -30,7 +33,8 @@ def end_mgd(dbase, se5_db):
         print("Couldn't delete")
         return
 
-    se5_db.remove_collection("drawings")
+    se5_db.remove_collection("drawings", drop=False)
+    se5_db.remove_collection("rooms")
     se5_db.remove_collections()
 
     dbase.nested_collections.delete_one({"name": "SE_PROJECT5"})
