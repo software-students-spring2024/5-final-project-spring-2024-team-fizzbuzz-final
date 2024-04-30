@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = {extras = ["async"], version = "*"}
 flask-socketio = "*"
 pytest = "*"
 python-dotenv = "*"
 pymongo = "*"
+flask = {extras = ["async"], version = "*"}
 
 [dev-packages]
 build = "*"
