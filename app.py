@@ -6,7 +6,7 @@ import json
 import pymongo
 from bson.objectid import ObjectId
 from bson import json_util
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, request
 from dotenv import dotenv_values
 from nested_collections import NestedCollection
 from setup_mg import end_mgd, start_mgd
@@ -141,7 +141,7 @@ def create_app():
         emit(
             "guess",
             {"message": response_message, "is_correct": is_correct},
-            broadcast=True,
+            room=request.sid,
         )
 
     return app
