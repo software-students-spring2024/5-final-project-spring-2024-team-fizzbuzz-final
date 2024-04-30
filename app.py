@@ -80,19 +80,19 @@ def create_app():
 
    
 
-    # app.connected = False
+    app.connected = False
 
-    # app.ensure_sync(connect_to_mongo)(app)
+    app.ensure_sync(connect_to_mongo)(app)
 
     @app.route("/")
     def home():
         """
         shows home page
         """
-        # if not session.get("associated_id"):
-        #     session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
-        #     print(session["associated_id"].get("$oid"))
-        #     print("Generating new session id")
+        if not session.get("associated_id"):
+            session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
+            print(session["associated_id"].get("$oid"))
+            print("Generating new session id")
 
         return render_template("home.html", home=True)
 
@@ -131,11 +131,11 @@ def create_app():
 
     return app
 
-    # @app.route("/test")
-    # def testing():
-    #     """ Shows testing page """
-    #     if not session.get("Associated_id"):
-    #         session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
+    @app.route("/test")
+    def testing():
+        """ Shows testing page """
+        if not session.get("Associated_id"):
+            session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
 
 
 if __name__ == "__main__":
