@@ -1,6 +1,9 @@
 # mac junk
 .DS_Store
 
+# virtual environment 
+/myenv/
+
 # Mongodb data volume
 mydata/
 
