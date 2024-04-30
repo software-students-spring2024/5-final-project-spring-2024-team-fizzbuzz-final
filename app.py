@@ -10,7 +10,7 @@ from flask import Flask, render_template, session
 from dotenv import dotenv_values
 from nested_collections import NestedCollection
 from setup_mg import end_mgd, start_mgd
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 
 config = dotenv_values(".env")
 
@@ -115,7 +115,15 @@ def create_app():
         """
         print(data)
         # broadcast the drawing data, to all clients
-        socketio.emit("drawing", data)
+        emit("drawing", data, broadcast=True, include_self=False)
+
+    @socketio.on("canvas_cleared")
+    def handle_clear():
+        """
+        Handles clearing the canvas
+        """
+        print("Clearing canvas")
+        emit("canvas_cleared", broadcast=True)
     
     @socketio.on("disconnect")
     def handle_disconnect():

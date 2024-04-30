@@ -7,12 +7,20 @@ socket.on('connect', function() {
     console.log('Websocket has connected to the server!');
 
 });
-socket.on('drawing', function(data) {
-    draw(data.x, data.y);
-});
 socket.on('canvas_cleared', function() {
     canvas.clear();
 });
+socket.on('drawing', function(data) {
+    let receivedPath = new fabric.Path(data.path, {
+        fill: null,
+        stroke: 'black',
+        strokeWidth: 2,
+        selectable: false
+    });
+    canvas.add(receivedPath);
+    canvas.renderAll();
+});
+
 const canvas = new fabric.Canvas('gameCanvas', {
     isDrawingMode: true 
 });
@@ -65,7 +73,7 @@ canvas.on('mouse:move', function(options) {
     canvas.renderAll();
 
     // emit the x and y coordinates of the mouse to the server
-    socket.emit('drawing', { x: pointer.x, y: pointer.y });
+    socket.emit('drawing', { path: path.path });
 
     
 
@@ -85,5 +93,6 @@ canvas.on('mouse:up', function(options) {
 
 canvas.on('mouse:out', function() {
     isDrawing = false;
+    path = null;
 });
 
