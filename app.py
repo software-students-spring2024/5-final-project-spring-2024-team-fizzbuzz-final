@@ -10,8 +10,12 @@ from flask import Flask, render_template, session
 from dotenv import dotenv_values
 from nested_collections import NestedCollection
 from setup_mg import end_mgd, start_mgd
+from flask_socketio import SocketIO, emit
 
 config = dotenv_values(".env")
+
+## create a socketio object
+socketio = SocketIO()
 
 
 async def connect_to_mongo(app):
@@ -67,6 +71,9 @@ def create_app():
     app = Flask(__name__)
     app.secret_key = config["WEBAPP_FLASK_SECRET_KEY"]
 
+    # attach socketio to the app
+    socketio.init_app(app)
+
     app.connected = False
 
     app.ensure_sync(connect_to_mongo)(app)
@@ -90,15 +97,42 @@ def create_app():
         """
         return render_template("play.html", play=True)
 
+    @socketio.on("connect")
+    def handle_connect():
+        print("Client connected")
+
+    @socketio.on("drawing")
+    def handle_drawing(data):
+        """
+        Handles drawing data
+        """
+        print(data)
+        # broadcast the drawing data, to all clients
+        emit("drawing", data, broadcast=True, include_self=False)
+
+    @socketio.on("canvas_cleared")
+    def handle_clear():
+        """
+        Handles clearing the canvas
+        """
+        print("Clearing canvas")
+        emit("canvas_cleared", broadcast=True)
+
+    @socketio.on("disconnect")
+    def handle_disconnect():
+        print("Client disconnected")
+
     return app
 
-    # @app.route("/test")
-    # def testing():
-    #     """ Shows testing page """
-    #     if not session.get("Associated_id"):
-    #         session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
+    @app.route("/test")
+    def testing():
+        """Shows testing page"""
+        if not session.get("Associated_id"):
+            session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
 
 
 if __name__ == "__main__":
     flask_app = create_app()
-    flask_app.run(port=config["WEBAPP_FLASK_PORT"])
+    socketio.run(
+        flask_app, host="0.0.0.0", port=config["WEBAPP_FLASK_PORT"], debug=True
+    )

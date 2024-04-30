@@ -20,6 +20,8 @@
                 <div class="container">
                     <h2>Drawing goes here!</h2>
                     <canvas id="gameCanvas"></canvas>
+                    <button id="clearButton">Clear</button>
+                    
                 </div>
             </section>
 
@@ -41,7 +43,9 @@
         </main>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-3.0.4.min.js"></script>
         <script src="{{ url_for('static', filename='js/drawing.js') }}"></script>
+        
 
            
 
