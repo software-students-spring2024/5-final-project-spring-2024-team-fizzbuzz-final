@@ -18,7 +18,6 @@ config = dotenv_values(".env")
 socketio = SocketIO()
 
 
-
 async def connect_to_mongo(app):
     """
     Connects to mongoDB asyncronously..
@@ -63,8 +62,6 @@ async def connect_to_mongo(app):
     app.db = dbase
     app.se5_db = se5_db
 
-    
-
 
 def create_app():
     """
@@ -74,11 +71,8 @@ def create_app():
     app = Flask(__name__)
     app.secret_key = config["WEBAPP_FLASK_SECRET_KEY"]
 
-
     # attach socketio to the app
     socketio.init_app(app)
-
-   
 
     app.connected = False
 
@@ -102,11 +96,10 @@ def create_app():
         shows play page
         """
         return render_template("play.html", play=True)
-    
+
     @socketio.on("connect")
     def handle_connect():
         print("Client connected")
-
 
     @socketio.on("drawing")
     def handle_drawing(data):
@@ -124,7 +117,7 @@ def create_app():
         """
         print("Clearing canvas")
         emit("canvas_cleared", broadcast=True)
-    
+
     @socketio.on("disconnect")
     def handle_disconnect():
         print("Client disconnected")
@@ -133,11 +126,13 @@ def create_app():
 
     @app.route("/test")
     def testing():
-        """ Shows testing page """
+        """Shows testing page"""
         if not session.get("Associated_id"):
             session["associated_id"] = json.loads(json_util.dumps(ObjectId()))
 
 
 if __name__ == "__main__":
     flask_app = create_app()
-    socketio.run(flask_app, host='0.0.0.0', port=config["WEBAPP_FLASK_PORT"], debug=True)
+    socketio.run(
+        flask_app, host="0.0.0.0", port=config["WEBAPP_FLASK_PORT"], debug=True
+    )
