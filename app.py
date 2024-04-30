@@ -3,6 +3,7 @@ Web-app
 """
 
 import json
+import random
 import pymongo
 from flask_socketio import SocketIO, emit, join_room
 from bson import json_util, objectid
@@ -16,10 +17,7 @@ config = dotenv_values(".env")
 ## create a socketio object
 socketio = SocketIO()
 
-## use the word apple for guessing temporarily
-curr_word = "apple"
-
-ROOM_SIZE = 2
+ROOM_SIZE = 3
 
 
 async def connect_to_mongo(app):
@@ -67,7 +65,7 @@ async def connect_to_mongo(app):
     app.se5_db = se5_db
 
 
-def create_app():
+def create_app():  # pylint: disable=too-many-statements
     """
     returns a flask app
     """
@@ -82,7 +80,8 @@ def create_app():
 
     app.ensure_sync(connect_to_mongo)(app)
 
-    app.rooms = {}
+    ## use the word apple for guessing temporarily
+    curr_word = "apple"
 
     @app.route("/")
     def home():
@@ -101,7 +100,15 @@ def create_app():
         """
         shows play page
         """
-        return render_template("play.html", play=True)
+
+        db_room = app.se5_db["rooms"].find_one({"name": session["room"]})
+
+        print("This is what we have", db_room["draw"])
+        return render_template(
+            "play.html",
+            play=True,
+            guess=session["associated_id"]["$oid"] != db_room["draw"]["$oid"],
+        )
 
     @app.route("/join-game", methods=["GET", "POST"])
     def join_game():
@@ -131,7 +138,9 @@ def create_app():
                     )
                 )
             session["room"] = request.form["room"]
-            app.se5_db["rooms"].insert_one({"name": request.form["room"], "count": 0})
+            app.se5_db["rooms"].insert_one(
+                {"name": request.form["room"], "count": 0, "players": [], "draw": None}
+            )
             return redirect(url_for("waiting_room"))
 
         return redirect(
@@ -155,15 +164,22 @@ def create_app():
 
         app.se5_db: NestedCollection = app.se5_db  # type: ignore
         app.se5_db["rooms"].update_one(
-            {"name": room}, {"$inc": {"count": 1}, "$set": {"name": room}}
+            {"name": room},
+            {"$inc": {"count": 1}, "$push": {"players": session["associated_id"]}},
         )
 
         emit("assigned-room", {"room": room}, broadcast=False, namespace="/waiting")
-        if app.se5_db["rooms"].find_one({"name": room})["count"] == ROOM_SIZE:
+        db_room = app.se5_db["rooms"].find_one({"name": room})
+        print(db_room["count"], db_room["players"])
+        print(ROOM_SIZE)
+        if db_room["count"] == ROOM_SIZE:
+            rand_ind = random.randint(1, ROOM_SIZE - 1)
+            draw = db_room["players"][rand_ind]
+            app.se5_db["rooms"].update_one({"name": room}, {"$set": {"draw": draw}})
             print(f"sufficient people... ready to start room {room}")
             emit(
                 "ready",
-                {"message": f"{room} is ready", "room": room},
+                {"message": f"{room} is ready", "room": room, "draw": draw},
                 broadcast=True,
                 namespace="/waiting",
             )
@@ -173,12 +189,23 @@ def create_app():
         print("Client connected")
         username = session["associated_id"]
         room = session["room"]
+        db_room = app.se5_db["rooms"].find_one({"name": room})
         join_room(room)
         print(username, "joined", room)
         emit(
             "new-player",
-            {"message": f"{username} joined {room}"},
+            {
+                "message": f"{username} joined {room}",
+            },
             broadcast=True,
+            include_self=False,
+            namespace="/play",
+            to=room,
+        )
+        emit(
+            "joined",
+            {"draw": db_room["draw"]["$oid"] == session["associated_id"]["$oid"]},
+            broadcast=False,
             namespace="/play",
             to=room,
         )
@@ -211,7 +238,7 @@ def create_app():
     def handle_disconnect():
         print("Client disconnected")
 
-    @socketio.on("submit_guess")
+    @socketio.on("submit_guess", namespace="/guessing")
     def handle_guess(data):
         """
         Handles the guess
@@ -227,7 +254,8 @@ def create_app():
         emit(
             "guess",
             {"message": response_message, "is_correct": is_correct},
-            room=request.sid,
+            to=session["room"],
+            namespace="/guessing",
         )
 
     return app

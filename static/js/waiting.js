@@ -1,22 +1,22 @@
-let socket = io.connect('/waiting');
-let assigned;
+document.addEventListener('DOMContentLoaded', main);
 
-socket.on('connect', function(message) {
-    console.log('Websocket has connected to the server!');
-    console.log(message);
-});
+function main() {
+    let socket = io.connect('/waiting');
+    let assigned;
 
-socket.on('assigned-room', function(data) {
-    console.log(data);
-    assigned = data["room"];
-})
+    socket.on('connect', function() {
+        console.log('Websocket has connected to the server!');
+    });
 
-socket.on('ready', function(data) {
-    console.log(data);
-    console.log(assigned);
-    console.log(data["room"]);
-    if (assigned == data["room"]) {
-        console.log("Lezzgpooo")
-        window.location.replace('/play');
-    }
-});
+    socket.on('assigned-room', function(data) {
+        console.log(data);
+        assigned = data["room"];
+    })
+
+    socket.on('ready', function(data) {
+        console.log(data.message);
+        if (assigned == data["room"]) {
+            window.location.replace('/play');
+        }
+    });
+};
