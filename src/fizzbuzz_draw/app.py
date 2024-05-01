@@ -359,9 +359,13 @@ def create_app():  # pylint: disable=too-many-statements
 def main():
     """Main"""
     flask_app = create_app()
-    socketio.run(flask_app, host="0.0.0.0", port=config["WEBAPP_FLASK_PORT"],
-                 debug=True, use_reloader=True
-                 )
+    socketio.run(
+        flask_app,
+        host="0.0.0.0",
+        port=config["WEBAPP_FLASK_PORT"],
+        debug=True,
+        use_reloader=True,
+    )
     # return flask_app
 
 
