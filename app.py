@@ -184,7 +184,7 @@ def create_app():  # pylint: disable=too-many-statements
                 {"message": f"{room} is ready", "room": room, "draw": draw},
                 broadcast=True,
                 namespace="/waiting",
-                to=room
+                to=room,
             )
 
     @socketio.on("connect", namespace="/play")
@@ -197,9 +197,7 @@ def create_app():  # pylint: disable=too-many-statements
         print(username, "joined", room)
         emit(
             "new-player",
-            {
-                "message": f"{username} joined {room}",
-            },
+            {"message": f"{username} joined {room}",},
             broadcast=True,
             include_self=False,
             namespace="/play",
@@ -209,9 +207,10 @@ def create_app():  # pylint: disable=too-many-statements
         emit(
             "joined",
             {"draw": db_room["draw"]["$oid"] == session["associated_id"]["$oid"]},
-            broadcast=False)
+            broadcast=False,
+        )
         print(username)
-        
+
     @socketio.on("drawing", namespace="/play")
     def handle_drawing(data):
         """
