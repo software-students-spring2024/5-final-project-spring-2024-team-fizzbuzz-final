@@ -1,6 +1,8 @@
 # Real-Time Drawing and Guessing Game
 
 ## Badges
+![example workflow](https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final/blob/main/.github/workflows/CI-CD.yml/badge.svg)
+
 
 
 This project is a Flask-SocketIO web application designed for real-time communication and interaction through a drawing and guessing game. Players can join rooms, participate in drawing, guess drawings made by others, and see real-time updates.
