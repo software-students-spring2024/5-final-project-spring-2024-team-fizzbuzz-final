@@ -23,18 +23,6 @@ class NestedCollection:
             # collection[0] : pseudonym - collection[1] : collection name
             self.dict[col[0]] = col[1]
 
-    def name_from_pseudonym(self, pseudonym: AnyStr) -> AnyStr:
-        """
-        get mapping between pseudonym and name
-        """
-        return self.dict[pseudonym]
-
-    def list_collections(self) -> None:
-        """
-        list all collection
-        """
-        print(self.config["children"])
-
     def add_collection(self, pseudonym: AnyStr, name: AnyStr) -> None:
         """
         add a collection

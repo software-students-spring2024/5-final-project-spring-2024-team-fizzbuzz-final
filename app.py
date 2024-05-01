@@ -193,7 +193,6 @@ def create_app():  # pylint: disable=too-many-statements
         username = session["associated_id"]
         room = session["room"]
         db_room = app.se5_db["rooms"].find_one({"name": room})
-        join_room(room)
         print(username, "joined", room)
         emit(
             "new-player",
