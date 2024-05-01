@@ -33,5 +33,7 @@ Follow these instructions to run a copy of the project on your local machine.
 3.  ** Create a .env file in the root of the directory with the following contents
    insert MongoDB credentials here
 4. ** Running with Docker **
-   To run the project, use docker-compose up --build
+   To run the project, use
+   ```bash
+   docker-compose up --build
 
