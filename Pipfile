@@ -14,6 +14,7 @@ setuptools = "*"
 twine = "*"
 waitress = "*"
 eventlet = "*"
+fizzbuzz-draw = {file = ".", editable = true}
 
 [dev-packages]
 build = "*"

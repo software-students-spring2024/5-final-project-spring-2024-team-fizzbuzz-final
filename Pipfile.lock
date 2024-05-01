@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3414b850761aaebfdf4b9e17a0c86a9ff9b17a75f6815c59c75e59180499e02b"
+            "sha256": "69eda3d01080c26cfadbeb14d0316fd2467e9ea3dc3769e4e7e618abb243fa35"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -216,6 +216,10 @@
             "index": "pypi",
             "markers": "python_version >= '3.7'",
             "version": "==0.36.1"
+        },
+        "fizzbuzz-draw": {
+            "editable": true,
+            "file": "."
         },
         "flask": {
             "extras": [
