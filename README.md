@@ -15,7 +15,11 @@ This project is a Flask-SocketIO web application designed for real-time communic
 
 [Shubhi Upadhyay](https://github.com/shubhiupa19)
 
-## Docker Containers
+## Deployment Link
+
+https://fizzbuzz-draw-5d5v2.ondigitalocean.app/
+
+## Docker Container
 
 
 ## Getting Started
