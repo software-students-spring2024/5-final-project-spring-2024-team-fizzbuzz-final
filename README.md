@@ -6,6 +6,7 @@
 
 
 
+## Project Description
 
 This project is a Flask-SocketIO web application designed for real-time communication and interaction through a drawing and guessing game. Players can join rooms, participate in drawing, guess drawings made by others, and see real-time updates.
 
