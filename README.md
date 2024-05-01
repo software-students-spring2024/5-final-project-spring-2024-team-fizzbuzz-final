@@ -1,7 +1,7 @@
 # Real-Time Drawing and Guessing Game
 
 ## Badges
-![example workflow](https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final/blob/main/.github/workflows/CI-CD.yml/badge.svg)
+![CI/CD Badge](https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final/actions/workflows/CI-CD.yml/badge.svg)
 
 
 
