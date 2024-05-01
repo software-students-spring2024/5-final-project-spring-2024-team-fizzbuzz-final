@@ -24,7 +24,8 @@ Follow these instructions to run a copy of the project on your local machine.
 
 ### Running the Project 
 
-1. ** Clone the Repository **
+1. **Clone the Repository**
+   ```bash
    git clone https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final.git
 
    cd 5-final-project-spring-2024-team-fizzbuzz-final
