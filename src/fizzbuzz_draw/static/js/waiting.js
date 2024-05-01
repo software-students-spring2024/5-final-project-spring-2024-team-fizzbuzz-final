@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', main);
 
 function main() {
-    let socket = io.connect('/waiting', {transports: ['websocket']});
+    let socket = io.connect('/waiting');
 
     socket.on('connect', function() {
         console.log('Websocket has connected to the server!');

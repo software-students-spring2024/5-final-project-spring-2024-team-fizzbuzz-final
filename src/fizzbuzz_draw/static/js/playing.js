@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', main);
 
 function main() {
-    let socket = io.connect('/play', {transports: ['websocket']});
+    let socket = io.connect('/play');
     let isDrawing = false;
     let lastX, lastY;
     let path = null;
@@ -43,7 +43,7 @@ function main() {
     });
 
     socket.on("next-round", function(data) {
-        location.reload();
+        location.reload(true);
     })
 
     socket.on("scores", function(data) {
