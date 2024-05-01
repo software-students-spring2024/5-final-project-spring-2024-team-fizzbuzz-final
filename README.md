@@ -32,6 +32,23 @@ Follow these instructions to run a copy of the project on your local machine.
 
 ### Running the Project
 
+
+#### Running from DockerHub Image
+
+1. **Pull built image from DockerHub**
+   ```
+   docker pull doody-shark/se-project-5:main
+   ```
+
+2. **Run image with port 8080 exposed with interactive termianl**
+   ```
+   docker run - ti -p 8080:8080 doody-shark/se-project-5:main
+   ```
+
+This will open up the server on localhost:8080
+
+#### Running from Github Repository
+
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final.git
@@ -53,9 +70,12 @@ Follow these instructions to run a copy of the project on your local machine.
    WEBAPP_FLASK_APP = app.py
    ```
 
-3. **Running with Docker**
+3. **r**
    To run the project, use
    ```bash
-   docker-compose up --build
+   docker build -ti --tag game .
+   docker run -ti -p 8080:8080 game
    ```
+
+This will open up the server on localhost:8080
 
