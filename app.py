@@ -80,9 +80,6 @@ def create_app():  # pylint: disable=too-many-statements
 
     app.ensure_sync(connect_to_mongo)(app)
 
-    ## use the word apple for guessing temporarily
-    curr_word = "apple"
-
     @app.route("/")
     def home():
         """
@@ -93,7 +90,7 @@ def create_app():  # pylint: disable=too-many-statements
             print(session["associated_id"].get("$oid"))
             print("Generating new session id")
 
-        return render_template("home.html", home=True)
+        return redirect(url_for("join_game"))
 
     @app.route("/play")
     def play():
@@ -121,10 +118,15 @@ def create_app():  # pylint: disable=too-many-statements
 
         full_rooms = app.se5_db["rooms"].find({"count": ROOM_SIZE})
         free_rooms = app.se5_db["rooms"].find({"count": {"$lt": ROOM_SIZE}})
+        theme_packs = app.se5_db["theme_packs"].find()
 
         if request.method == "GET":
             return render_template(
-                "join-game.html", full_rooms=full_rooms, free_rooms=free_rooms
+                "join-game.html",
+                full_rooms=full_rooms,
+                free_rooms=free_rooms,
+                theme_packs=theme_packs,
+                error="",
             )
 
         if request.method == "POST":
@@ -135,12 +137,19 @@ def create_app():  # pylint: disable=too-many-statements
                         "join_game",
                         full_rooms=full_rooms,
                         free_rooms=free_rooms,
+                        theme_packs=theme_packs,
                         error="room already exists",
                     )
                 )
             session["room"] = request.form["room"]
             app.se5_db["rooms"].insert_one(
-                {"name": request.form["room"], "count": 0, "players": [], "draw": None}
+                {
+                    "name": request.form["room"],
+                    "count": 0,
+                    "players": [],
+                    "draw": None,
+                    "theme_pack": request.form["theme_pack"],
+                }
             )
             return redirect(url_for("waiting_room"))
 
@@ -149,6 +158,7 @@ def create_app():  # pylint: disable=too-many-statements
                 "join_game",
                 full_rooms=full_rooms,
                 free_rooms=free_rooms,
+                theme_packs=theme_packs,
                 error="Unexpected error",
             )
         )
@@ -193,6 +203,16 @@ def create_app():  # pylint: disable=too-many-statements
         username = session["associated_id"]
         room = session["room"]
         db_room = app.se5_db["rooms"].find_one({"name": room})
+
+        theme_pack = app.se5_db["theme_packs"].find_one(
+            {"theme": db_room["theme_pack"]}
+        )
+
+        print(theme_pack, db_room)
+
+        rand_ind = random.randint(0, len(theme_pack["prompts"]))
+        word = theme_pack["prompts"][rand_ind]
+        print(word)
         join_room(room)
         print(username, "joined", room)
         emit(
@@ -208,7 +228,10 @@ def create_app():  # pylint: disable=too-many-statements
         print(username)
         emit(
             "joined",
-            {"draw": db_room["draw"]["$oid"] == session["associated_id"]["$oid"]},
+            {
+                "draw": db_room["draw"]["$oid"] == session["associated_id"]["$oid"],
+                "word": word,
+            },
             broadcast=False,
         )
         print(username)
@@ -241,25 +264,12 @@ def create_app():  # pylint: disable=too-many-statements
     def handle_disconnect():
         print("Client disconnected")
 
-    @socketio.on("submit_guess", namespace="/guessing")
-    def handle_guess(data):
+    @socketio.on("guessed", namespace="/guessing")
+    def handle_guess():
         """
         Handles the guess
         """
-        guess = data["guess"].lower().strip()
-        is_correct = guess == curr_word
-
-        if is_correct:
-            response_message = "Correct!"
-        else:
-            response_message = "Incorrect!"
-
-        emit(
-            "guess",
-            {"message": response_message, "is_correct": is_correct},
-            to=session["room"],
-            namespace="/guessing",
-        )
+        print("Yay got it right")
 
     return app
 

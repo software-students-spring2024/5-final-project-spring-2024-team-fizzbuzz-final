@@ -1,6 +1,6 @@
 // when the page is loaded, this function will be called
 document.addEventListener('DOMContentLoaded', function() {
-    const socket = io();
+    const socket = io('/guessing');
 
     // when the user clicks the submit button, this function gets the value emits it to the server and clears the input field
     document.getElementById("guess-form").addEventListener("submit", function(event) {

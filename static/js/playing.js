@@ -5,10 +5,10 @@ function main() {
     let isDrawing = false;
     let lastX, lastY;
     let path = null;
+    let current_prompt;
 
     socket.on('connect', function() {
         console.log('Websocket has connected to the server!');
-
     });
 
     socket.on('canvas_cleared', function() {
@@ -32,11 +32,14 @@ function main() {
 
     canvas.setDimensions({ width: 800, height: 400 });
 
-    const clearButton = document.getElementById('clearButton');
-
     socket.on('joined', function(data) {
         console.log(data);
+
+        current_prompt = data.word
+
         if (data.draw) {
+
+            const clearButton = document.getElementById('clearButton');
             
             canvas.isDrawingMode=true;
             // keeps track of the mouse's most recent position
@@ -50,9 +53,7 @@ function main() {
                     fill: null,
                     stroke: 'black',
                     strokeWidth: 2,
-                    selectable: false,
-                    
-                
+                    selectable: false,                
                     });
                 
                 // add the path to the canvas
@@ -105,7 +106,21 @@ function main() {
             });
 
         } else {
-            clearButton.remove();
+            const guess_form = document.querySelector("#guess-form")
+
+            guess_form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                const guess = document.querySelector("#guess-input").value;
+                if (guess == current_prompt) {
+                    socket.emit('guessed', { guess: guess });
+                    document.querySelector('#guess-input').value = '';  
+                    document.querySelector('#result').textContent = "Parfait!!!";
+                    guess_form.remove();
+                } else {
+                    document.querySelector('#result').textContent = "Wrong :P";
+                }
+            });
+        
         }
     })
 

@@ -6,6 +6,15 @@
     <form action="/join-game" method="POST">
         <input required name="room" type="text" placeholder="room-name" />
         <button type="submit">Create room</button>
+        <label for="theme_pack">Theme Pack</label>
+        <select name="theme_pack">
+        {% for theme_pack in theme_packs %}
+                <option value="{{theme_pack.theme}}">{{theme_pack.theme}}</option>
+        {% endfor %}
+        </select>
+        <div>
+            {{error}}
+        </div>
     </form>
 </div>
 
