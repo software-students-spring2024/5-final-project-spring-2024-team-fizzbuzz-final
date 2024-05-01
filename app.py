@@ -101,6 +101,7 @@ def create_app():  # pylint: disable=too-many-statements
         shows play page
         """
 
+        print("join game")
         db_room = app.se5_db["rooms"].find_one({"name": session["room"]})
 
         print("This is what we have", db_room["draw"])
@@ -155,6 +156,7 @@ def create_app():  # pylint: disable=too-many-statements
     @app.route("/waiting-room")
     def waiting_room():
         """Waiting room page"""
+        print("we went to waiting room")
         return render_template("waiting.html", room=session["room"])
 
     @socketio.on("connect", namespace="/waiting")
@@ -168,7 +170,7 @@ def create_app():  # pylint: disable=too-many-statements
             {"$inc": {"count": 1}, "$push": {"players": session["associated_id"]}},
         )
 
-        emit("assigned-room", {"room": room}, broadcast=False, namespace="/waiting")
+        join_room(room)
         db_room = app.se5_db["rooms"].find_one({"name": room})
         print(db_room["count"], db_room["players"])
         print(ROOM_SIZE)
@@ -182,6 +184,7 @@ def create_app():  # pylint: disable=too-many-statements
                 {"message": f"{room} is ready", "room": room, "draw": draw},
                 broadcast=True,
                 namespace="/waiting",
+                to=room
             )
 
     @socketio.on("connect", namespace="/play")
@@ -202,14 +205,13 @@ def create_app():  # pylint: disable=too-many-statements
             namespace="/play",
             to=room,
         )
+        print(username)
         emit(
             "joined",
             {"draw": db_room["draw"]["$oid"] == session["associated_id"]["$oid"]},
-            broadcast=False,
-            namespace="/play",
-            to=room,
-        )
-
+            broadcast=False)
+        print(username)
+        
     @socketio.on("drawing", namespace="/play")
     def handle_drawing(data):
         """
