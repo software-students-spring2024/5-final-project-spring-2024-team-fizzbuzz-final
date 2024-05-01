@@ -35,7 +35,19 @@ Follow these instructions to run a copy of the project on your local machine.
    cd 5-final-project-spring-2024-team-fizzbuzz-final
    
 3.  **Create a .env file in the root of the directory with the following contents**
-   insert MongoDB credentials here
+   ```
+   MONGODB_USER=your_mongodb_user
+   MONGODB_PASSWORD=your_mongodb_password
+   MONGODB_HOST=your_mongodb_host
+   MONGODB_NAME=your_database_name
+   MONGODB_AUTHSOURCE=admin
+   MONGODB_PORT=27017
+   WEBAPP_FLASK_SECRET_KEY=your_secret_key
+   WEBAPP_FLASK_PORT=5000
+   WEBAPP_FLASK_ENV = development
+   WEBAPP_FLASK_APP = app.py
+   ```
+
 4. **Running with Docker**
    To run the project, use
    ```bash
