@@ -50,8 +50,6 @@ def add_default_themes(se5_db):
         }
     )
 
-    print(se5_db["theme_packs"].find_one())
-
 
 def start_mgd(se5_db):
     """

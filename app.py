@@ -270,19 +270,12 @@ def create_app():  # pylint: disable=too-many-statements
         print("Clearing canvas")
         emit("canvas_cleared", broadcast=True, namespace="/play", to=session["room"])
 
-    @socketio.on("disconnect", namespace="/play")
-    def handle_disconnect():
-        print("Client disconnected")
-        # app.se5_db["rooms"].update_one(
-        #     {"name": session["room"]},
-        #     {"$inc": {"count": -1}, "$pop": {"players": session["associated_id"]}},
-        # )
-
     @socketio.on("guessed", namespace="/play")
     def handle_guess(data):
         """
         Handles the guess
         """
+        print("ENTERED!")
         db_room = app.se5_db["rooms"].find_one({"name": session["room"]})
 
         db_score = app.se5_db["scores"].find_one(
