@@ -197,7 +197,9 @@ def create_app():  # pylint: disable=too-many-statements
         print(username, "joined", room)
         emit(
             "new-player",
-            {"message": f"{username} joined {room}",},
+            {
+                "message": f"{username} joined {room}",
+            },
             broadcast=True,
             include_self=False,
             namespace="/play",

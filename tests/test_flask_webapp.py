@@ -20,7 +20,9 @@ class Tests:
         app = create_app()
 
         app.config.update(
-            {"TESTING": True,}
+            {
+                "TESTING": True,
+            }
         )
 
         assert app is not None
