@@ -47,6 +47,9 @@ jobs:
     name: Deliver to pypi
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    strategy:
+      matrix:
+        python-version: ["3.10"]
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
