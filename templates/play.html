@@ -11,6 +11,7 @@
                         <form id = "guess-form">
                             <input type = "text" id = "guess-input" placeholder = "Type your guess here">
                             <button type = "submit">Submit</button>
+                            <button id="skip">Skip Guess</button>
                         </form>
                         <div id="result" style="display: block;"></div>
                     </div>
@@ -21,7 +22,11 @@
 
             <section class="game">
                 <div class="container">
-                    <h2>Drawing goes here!</h2>
+                    <h2>Drawing
+                        {% if guess == False %}
+                            <span id="prompt"></span>
+                        {% endif %}
+                    </h2>
                     <canvas id="gameCanvas"></canvas>
                     {% if guess == False %}
                     <button id="clearButton">Clear</button>
