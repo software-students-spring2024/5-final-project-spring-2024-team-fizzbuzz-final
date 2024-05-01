@@ -33,6 +33,7 @@ Follow these instructions to run a copy of the project on your local machine.
    git clone https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final.git
 
    cd 5-final-project-spring-2024-team-fizzbuzz-final
+   ```
    
 2.  **Create a .env file in the root of the directory with the following contents**
    ```bash
@@ -52,4 +53,5 @@ Follow these instructions to run a copy of the project on your local machine.
    To run the project, use
    ```bash
    docker-compose up --build
+   ```
 
