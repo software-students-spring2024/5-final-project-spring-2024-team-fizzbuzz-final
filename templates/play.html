@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-game.html' %}
 
 {% block container %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/play.css') }}">
@@ -11,8 +11,9 @@
                         <form id = "guess-form">
                             <input type = "text" id = "guess-input" placeholder = "Type your guess here">
                             <button type = "submit">Submit</button>
+                            <button id="skip">Skip Guess</button>
                         </form>
-                        <div id="result" style="display: none;"></div>
+                        <div id="result" style="display: block;"></div>
                     </div>
                 </section>
             {% endif %}
@@ -21,27 +22,17 @@
 
             <section class="game">
                 <div class="container">
-                    <h2>Drawing goes here!</h2>
+                    <h2>Drawing
+                        {% if guess == False %}
+                            <span id="prompt"></span>
+                        {% endif %}
+                    </h2>
                     <canvas id="gameCanvas"></canvas>
+                    {% if guess == False %}
                     <button id="clearButton">Clear</button>
-                    
+                    {% endif %}
                 </div>
             </section>
-
-            {% if guess %}
-                <section class = "messaging-area">
-                    <div class = "container">
-                        <h2>Chat</h2>
-                        <div id = "chat-messages">
-                            <!-- display chat messages here -->
-                        </div>
-                        <form id = "chat-form">
-                            <input type = "text" id = "chat-input" placeholder = "Type your message here">
-                            <button type = "submit">Send</button>
-                        </form>
-                    </div>
-                </section>
-            {% endif %}
 
         </div>
            
@@ -49,10 +40,7 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-3.0.4.min.js"></script>
-        <script src="{{ url_for('static', filename='js/drawing.js') }}"></script>
-        {% if guess %}
-            <script src="{{ url_for('static', filename='js/guessing.js') }}"></script>    
-        {% endif %}       
+        <script src="{{ url_for('static', filename='js/playing.js') }}"></script>
 
         {% endblock %}
         

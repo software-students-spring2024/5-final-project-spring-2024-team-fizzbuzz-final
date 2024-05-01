@@ -21,8 +21,17 @@ html {
     background-color: rgb(250, 243, 243);
 }
 
+main {
+    padding: 10px;
+    height: 65%;
+}
+
 body {
     height: 100%;
+}
+
+footer {
+    height: 5%;
 }
 
 .start {
@@ -38,7 +47,7 @@ form {
     padding: 25px;
     border: 5px solid rgb(45, 14, 41);
     /* border-radius: 25px; */
-    font-size: xx-large;
+    font-size: large;
 
 }
 
@@ -85,8 +94,8 @@ h1 {
 .card {
     padding: 5px;
     display: inline-block;
-    height: 230px;
-    width: 360px;
+    height: 100px;
+    width: 150px;
     border-radius: 5px;
     border: 5px solid black;
     background-color: white;
@@ -95,7 +104,7 @@ h1 {
   
 .card-header {
     font-size: large;
-    height: 10%;
+    height: 40%;
     text-align: left;
 }
   
@@ -104,8 +113,8 @@ h1 {
     width: 100%;
     align-items: center;
     vertical-align: middle;
-    height: 90%;
-    font-size: xx-large;
+    height: 60%;
+    font-size: x-large;
 }
 
 header a {
@@ -144,12 +153,12 @@ header img {
 header {
     text-align: center;
     width: 100%;
-    height: fit-content;
+    height: 30%;
     padding: 0px;
     margin:0;
     line-height: 1.5;
     background-color: rgb(240, 225, 228);
-    font-size: 100px;
+    font-size: large;
 }
 
 /* Creating navigation bar */
@@ -158,11 +167,11 @@ header {
 }
 
 .navigation a:link, a:visited {
-    font-size: 36px;
+    font-size: 18px;
     background-color: grey;
     color: rgb(99, 41, 92);
     border: 10px solid rgb(99, 41, 92);
-    padding: 5px 20px;
+    padding: 5px 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -174,7 +183,7 @@ header {
 }
 
 .navigation {
-    margin: 18px;
+    margin: 5px;
 }
 
 .navigation ul {

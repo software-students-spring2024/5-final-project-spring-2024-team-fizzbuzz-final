@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<div id="table-div">
+    {% if foundAny %}
+        <table>
+            <tr>
+                <td>GAME</td>
+                <td>SCORE</td>
+            </tr>
+        {% for score in scores %}
+            <tr>
+                <td>{{ score.get("game") }}<td>
+                <td>{{ score.get("score") }} }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <h1>（・□・；）No results found! </h1>
+    {% endif %}
+</div>
+
+{% endblock %}

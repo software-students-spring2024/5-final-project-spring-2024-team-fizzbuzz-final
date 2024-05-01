@@ -80,9 +80,6 @@ def create_app():  # pylint: disable=too-many-statements
 
     app.ensure_sync(connect_to_mongo)(app)
 
-    ## use the word apple for guessing temporarily
-    curr_word = "apple"
-
     @app.route("/")
     def home():
         """
@@ -90,10 +87,22 @@ def create_app():  # pylint: disable=too-many-statements
         """
         if not session.get("associated_id"):
             session["associated_id"] = json.loads(json_util.dumps(objectid.ObjectId()))
-            print(session["associated_id"].get("$oid"))
             print("Generating new session id")
 
-        return render_template("home.html", home=True)
+        return redirect(url_for("join_game"))
+
+    @app.route("/scores")
+    def scores():
+        """
+        shows scores page
+        """
+
+        scores_raw = app.se5_db["scores"].find(
+            {"player": objectid.ObjectId(session["associated_id"]["$oid"])}
+        )
+        scores = list(scores_raw)
+
+        return render_template("scores.html", scores=scores, foundAny=len(scores) > 0)
 
     @app.route("/play")
     def play():
@@ -101,10 +110,8 @@ def create_app():  # pylint: disable=too-many-statements
         shows play page
         """
 
-        print("join game")
         db_room = app.se5_db["rooms"].find_one({"name": session["room"]})
 
-        print("This is what we have", db_room["draw"])
         return render_template(
             "play.html",
             play=True,
@@ -121,10 +128,15 @@ def create_app():  # pylint: disable=too-many-statements
 
         full_rooms = app.se5_db["rooms"].find({"count": ROOM_SIZE})
         free_rooms = app.se5_db["rooms"].find({"count": {"$lt": ROOM_SIZE}})
+        theme_packs = app.se5_db["theme_packs"].find()
 
         if request.method == "GET":
             return render_template(
-                "join-game.html", full_rooms=full_rooms, free_rooms=free_rooms
+                "join-game.html",
+                full_rooms=full_rooms,
+                free_rooms=free_rooms,
+                theme_packs=theme_packs,
+                error="",
             )
 
         if request.method == "POST":
@@ -135,12 +147,20 @@ def create_app():  # pylint: disable=too-many-statements
                         "join_game",
                         full_rooms=full_rooms,
                         free_rooms=free_rooms,
+                        theme_packs=theme_packs,
                         error="room already exists",
                     )
                 )
             session["room"] = request.form["room"]
             app.se5_db["rooms"].insert_one(
-                {"name": request.form["room"], "count": 0, "players": [], "draw": None}
+                {
+                    "name": request.form["room"],
+                    "count": 0,
+                    "players": [],
+                    "draw": None,
+                    "theme_pack": request.form["theme_pack"],
+                    "num_rounds": 3,
+                }
             )
             return redirect(url_for("waiting_room"))
 
@@ -149,6 +169,7 @@ def create_app():  # pylint: disable=too-many-statements
                 "join_game",
                 full_rooms=full_rooms,
                 free_rooms=free_rooms,
+                theme_packs=theme_packs,
                 error="Unexpected error",
             )
         )
@@ -156,7 +177,6 @@ def create_app():  # pylint: disable=too-many-statements
     @app.route("/waiting-room")
     def waiting_room():
         """Waiting room page"""
-        print("we went to waiting room")
         return render_template("waiting.html", room=session["room"])
 
     @socketio.on("connect", namespace="/waiting")
@@ -172,8 +192,6 @@ def create_app():  # pylint: disable=too-many-statements
 
         join_room(room)
         db_room = app.se5_db["rooms"].find_one({"name": room})
-        print(db_room["count"], db_room["players"])
-        print(ROOM_SIZE)
         if db_room["count"] == ROOM_SIZE:
             rand_ind = random.randint(1, ROOM_SIZE - 1)
             draw = db_room["players"][rand_ind]
@@ -193,6 +211,14 @@ def create_app():  # pylint: disable=too-many-statements
         username = session["associated_id"]
         room = session["room"]
         db_room = app.se5_db["rooms"].find_one({"name": room})
+
+        theme_pack = app.se5_db["theme_packs"].find_one(
+            {"theme": db_room["theme_pack"]}
+        )
+
+        rand_ind = random.randint(0, len(theme_pack["prompts"]) - 1)
+        word = theme_pack["prompts"][rand_ind]
+
         join_room(room)
         print(username, "joined", room)
         emit(
@@ -205,20 +231,27 @@ def create_app():  # pylint: disable=too-many-statements
             namespace="/play",
             to=room,
         )
-        print(username)
         emit(
             "joined",
-            {"draw": db_room["draw"]["$oid"] == session["associated_id"]["$oid"]},
+            {
+                "draw": db_room["draw"]["$oid"] == session["associated_id"]["$oid"],
+            },
             broadcast=False,
         )
-        print(username)
+        emit(
+            "prompt",
+            {"word": word},
+            broadcast=True,
+            include_self=True,
+            namespace="/play",
+            to=room,
+        )
 
     @socketio.on("drawing", namespace="/play")
     def handle_drawing(data):
         """
         Handles drawing data
         """
-        # print(data)
         # broadcast the drawing data, to all clients
         emit(
             "drawing",
@@ -240,26 +273,92 @@ def create_app():  # pylint: disable=too-many-statements
     @socketio.on("disconnect", namespace="/play")
     def handle_disconnect():
         print("Client disconnected")
+        # app.se5_db["rooms"].update_one(
+        #     {"name": session["room"]},
+        #     {"$inc": {"count": -1}, "$pop": {"players": session["associated_id"]}},
+        # )
 
-    @socketio.on("submit_guess", namespace="/guessing")
+    @socketio.on("guessed", namespace="/play")
     def handle_guess(data):
         """
         Handles the guess
         """
-        guess = data["guess"].lower().strip()
-        is_correct = guess == curr_word
+        db_room = app.se5_db["rooms"].find_one({"name": session["room"]})
 
-        if is_correct:
-            response_message = "Correct!"
-        else:
-            response_message = "Incorrect!"
-
-        emit(
-            "guess",
-            {"message": response_message, "is_correct": is_correct},
-            to=session["room"],
-            namespace="/guessing",
+        db_score = app.se5_db["scores"].find_one(
+            {
+                "player": objectid.ObjectId(session["associated_id"]["$oid"]),
+                "game": session["room"],
+            }
         )
+
+        if not db_score:
+            app.se5_db["scores"].insert_one(
+                {
+                    "player": objectid.ObjectId(session["associated_id"]["$oid"]),
+                    "game": session["room"],
+                    "score": 0,
+                    "num_rounds": db_room["num_rounds"],
+                }
+            )
+
+        if not data["skipped"]:
+            app.se5_db["scores"].update_one(
+                {
+                    "player": objectid.ObjectId(session["associated_id"]["$oid"]),
+                    "game": session["room"],
+                },
+                {"$inc": {"score": 1}},
+            )
+
+        print(db_room["count"])
+
+        if db_room["count"] > 2:
+            app.se5_db["rooms"].update_one(
+                {"name": session["room"]},
+                {"$inc": {"count": -1}, "$push": {"players": session["associated_id"]}},
+            )
+        else:
+            if db_room["num_rounds"] == 1:
+                print("done")
+                app.se5_db["rooms"].delete_one({"name": session["room"]})
+                emit(
+                    "scores",
+                    {},
+                    broadcast=True,
+                    include_self=True,
+                    namespace="/play",
+                    to=session["room"],
+                )
+
+                return
+
+            app.se5_db["rooms"].update_one(
+                {"name": session["room"]},
+                {
+                    "$set": {"count": ROOM_SIZE},
+                    "$push": {
+                        "players": objectid.ObjectId(session["associated_id"]["$oid"])
+                    },
+                    "$inc": {"num_rounds": -1},
+                },
+            )
+
+            rand_ind = random.randint(1, ROOM_SIZE - 1)
+            draw = db_room["players"][rand_ind]
+            print(draw)
+            app.se5_db["rooms"].update_one(
+                {"name": session["room"]}, {"$set": {"draw": draw}}
+            )
+
+            emit(
+                "next-round",
+                {},
+                broadcast=True,
+                include_self=True,
+                namespace="/play",
+                to=session["room"],
+            )
 
     return app
 

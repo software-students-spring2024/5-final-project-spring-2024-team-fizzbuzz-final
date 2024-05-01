@@ -11,16 +11,11 @@
    
       <header>
         <div class="container">
-          <a href="{{ url_for('join_game') }}" class="logo">
+          <div href="{{ url_for('join_game') }}" class="logo">
               <img src="{{ url_for('static', filename='img/logo.png') }}" alt="fizzbuzz.draw Logo">
               <h1>fizzbuzz.draw</h1>
-          </a>
-          <nav class = "navigation">
-              <ul>
-                  <li><a href="{{ url_for('join_game') }}">Join Game</a></li>
-                  <li><a href="{{ url_for('scores') }}">Scores</a></li>
-              </ul>
-          </nav>
+          </div>
+          <button id="leave">Leave Game</button>
       </div>
       </header>
 

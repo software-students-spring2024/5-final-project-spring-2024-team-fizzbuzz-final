@@ -5,10 +5,10 @@ function main() {
     let isDrawing = false;
     let lastX, lastY;
     let path = null;
+    let current_prompt;
 
     socket.on('connect', function() {
         console.log('Websocket has connected to the server!');
-
     });
 
     socket.on('canvas_cleared', function() {
@@ -26,17 +26,36 @@ function main() {
         canvas.renderAll();
     });
 
+    socket.on()
+
     const canvas = new fabric.Canvas('gameCanvas', {
         isDrawingMode: false 
     });
 
     canvas.setDimensions({ width: 800, height: 400 });
 
-    const clearButton = document.getElementById('clearButton');
+    socket.on('prompt', function(data) {
+        current_prompt = data.word;
+        const prompt = document.getElementById('prompt');
+        if (prompt) {
+            prompt.textContent = current_prompt;
+        }
+    });
+
+    socket.on("next-round", function(data) {
+        location.reload();
+    })
+
+    socket.on("scores", function(data) {
+        window.location.replace('/scores');
+    })
 
     socket.on('joined', function(data) {
         console.log(data);
+
         if (data.draw) {
+
+            const clearButton = document.getElementById('clearButton');
             
             canvas.isDrawingMode=true;
             // keeps track of the mouse's most recent position
@@ -50,9 +69,7 @@ function main() {
                     fill: null,
                     stroke: 'black',
                     strokeWidth: 2,
-                    selectable: false,
-                    
-                
+                    selectable: false,                
                     });
                 
                 // add the path to the canvas
@@ -105,7 +122,33 @@ function main() {
             });
 
         } else {
-            clearButton.remove();
+            const guess_form = document.querySelector("#guess-form");
+            const skip_button = document.querySelector('#skip');
+            console.log(skip_button);
+
+
+            skip_button.addEventListener("click", (event) => {
+                event.preventDefault();
+                console.log("Huh");
+                socket.emit('guessed', { skipped: true });
+                document.querySelector('#guess-input').value = '';  
+                document.querySelector('#result').textContent = "Skipped :(";
+                guess_form.remove();
+            })
+
+            guess_form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                const guess = document.querySelector("#guess-input").value;
+                if (guess == current_prompt) {
+                    socket.emit('guessed', { skipped: false });
+                    document.querySelector('#guess-input').value = '';  
+                    document.querySelector('#result').textContent = "Parfait!!!";
+                    guess_form.remove();
+                } else {
+                    document.querySelector('#result').textContent = "Wrong :P";
+                }
+            });
+        
         }
     })
 
