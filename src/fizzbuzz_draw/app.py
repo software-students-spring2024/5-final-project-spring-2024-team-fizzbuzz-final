@@ -15,7 +15,7 @@ from src.fizzbuzz_draw.setup_mg import end_mgd, start_mgd
 config = dotenv_values(".env")
 
 ## create a socketio object
-socketio = SocketIO(ping_timeout=60*10, ping_interval=60)
+socketio = SocketIO()
 
 ROOM_SIZE = 3
 

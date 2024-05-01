@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "fizzbuzz-draw"
 description = "Fizzbuzz draw lolz"
-version = "1.0.9"
+version = "1.0.10"
 authors = [
   { name="Dhiyaa Al Jorf", email= "da2863@nyu.edu" },
   { name= "Firas Darwish", email= "fbd2014@nyu.edu" },
