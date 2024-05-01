@@ -2,6 +2,8 @@
 
 ## Badges
 ![CI/CD Badge](https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final/actions/workflows/CI-CD.yml/badge.svg)
+![lint-free](https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final/actions/workflows/lint.yml/badge.svg)
+
 
 
 
