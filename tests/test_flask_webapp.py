@@ -49,6 +49,12 @@ class Tests:
     def test_mongo(self, app_c):
         """test that mongodb is connected to"""
         assert app_c.db is not None
+        assert app_c.se5_db is not None
+
+        test = app_c.se5_db["theme_packs"].find_one({})
+
+        assert test is not None
+
         self.stupid()
 
     def test_join_game(self, app_c):
@@ -59,26 +65,28 @@ class Tests:
         response = user1.get("/join-game")
         assert response.status_code == 200
 
-    def test_create_game(self, app_c):
+    @pytest.fixture
+    def app_with_room(self, app_c):
         """checking whether user who creates room gets redirected"""
         self.stupid()
         user1 = app_c.test_client()
 
         data = {}
         data["room"] = "firfir"
+        data["theme_pack"] = "fruits"
         response = user1.post("/join-game", data=data)
         assert 300 <= response.status_code < 400
 
-    def test_socket_io_join_game(self, app_c):
+        yield (app_c, user1)
+
+    def test_socket_io_join_game(self, app_with_room):
         """checking whether second user to join created room gets redirected"""
         self.stupid()
-        user1 = app_c.test_client()
-        user2 = app_c.test_client()
 
-        data = {}
-        data["room"] = "firfir"
-        user1.post("/join-game", data=data)
-        response2 = user2.get("/join-game?room=" + data["room"])
+        app_c = app_with_room[0]
+
+        user2 = app_c.test_client()
+        response2 = user2.get("/join-game?room=firfir")
         assert 300 <= response2.status_code < 400
 
     def test_socket_rejected(self, app_c):
@@ -105,17 +113,16 @@ class Tests:
         with user.session_transaction() as sess:
             assert sess["associated_id"] is not None
 
-    def test_session_room(self, app_c):
+    def test_session_room(self, app_with_room):
         """make sure the user joins the right room"""
         self.stupid()
 
-        user1 = app_c.test_client()
+        app_c = app_with_room[0]
+        user1 = app_with_room[1]
+
         user2 = app_c.test_client()
 
-        data = {}
-        data["room"] = "firfir"
-        user1.post("/join-game", data=data)
-        user2.get("/join-game?room=" + data["room"])
+        user2.get("/join-game?room=firfir")
 
         user1.get("/waiting-room")
         user2.get("/waiting-room")
@@ -135,6 +142,7 @@ class Tests:
 
         data = {}
         data["room"] = "firfir"
+        data["theme_pack"] = "fruits"
         user1.post("/join-game", data=data)
         user2.get("/join-game?room=" + data["room"])
 
@@ -160,6 +168,7 @@ class Tests:
 
         data = {}
         data["room"] = "firfir"
+        data["theme_pack"] = "fruits"
         user1.post("/join-game", data=data)
         user2.get("/join-game?room=" + data["room"])
         user3.get("/join-game?room=" + data["room"])
@@ -193,6 +202,7 @@ class Tests:
 
         data = {}
         data["room"] = "firfir"
+        data["theme_pack"] = "fruits"
         user1.post("/join-game", data=data)
         user2.get("/join-game?room=" + data["room"])
         user3.get("/join-game?room=" + data["room"])
@@ -231,6 +241,7 @@ class Tests:
 
         data = {}
         data["room"] = "firfir"
+        data["theme_pack"] = "fruits"
         user1.post("/join-game", data=data)
         user2.get("/join-game?room=" + data["room"])
         user3.get("/join-game?room=" + data["room"])
