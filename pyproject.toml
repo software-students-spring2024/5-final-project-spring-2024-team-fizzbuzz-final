@@ -1,4 +1,30 @@
-# pytest settings that might help... feel free to modify or remove as needed
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fizzbuzz-draw"
+description = "Fizzbuzz draw lolz"
+version = "1.0.1"
+authors = [
+  { name="Dhiyaa Al Jorf", email= "da2863@nyu.edu" },
+  { name= "Firas Darwish", email= "fbd2014@nyu.edu" },
+  { name= "Shubhi Upadhyay", email= "su2132@nyu.edu"}
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+keywords = ["draw", "scribble", "fizzbuzz"]
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
 
 [tool.pytest.ini_options]
 minversion = "6.2.4"  # minimum pytest version
@@ -7,3 +33,12 @@ pythonpath = ["."]
 testpaths = [
     "tests",
 ]
+
+
+[project.urls]
+"Homepage" = "https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final"
+"Repository" = "https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final.git"
+"Bug Tracker" = "https://github.com/software-students-spring2024/5-final-project-spring-2024-team-fizzbuzz-final/issues"
+
+[project.scripts]
+fizzbuzz_draw = "fizzbuzz_draw.__main__:main"

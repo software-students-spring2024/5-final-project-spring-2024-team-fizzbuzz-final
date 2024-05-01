@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # in Docker, it is common to base a new image on a previously-created image
-FROM python:3.8-slim-buster
+FROM python:3.10-slim-buster
 
 # Set the working directory in the image
 WORKDIR /app
@@ -38,8 +38,12 @@ RUN echo WEBAPP_FLASK_SECRET_KEY=$WEBAPP_FLASK_SECRET_KEY  >> .env
 # Copy the current directory contents into the container at /app
 ADD . .
 
+RUN pip3 install fizzbuzz-draw
+
+RUN pip3 install waitress
+
 # expose the port that the Flask app is running on... by default 80
 EXPOSE 8080
 
 # Run app.py when the container launches
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "-p", "8080"]
+CMD [ "waitress-serve", "--call", "fizzbuzz_draw.__main__:main"]

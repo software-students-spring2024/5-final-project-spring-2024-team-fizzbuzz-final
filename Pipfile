@@ -9,6 +9,11 @@ pytest = "==7.0.0"
 python-dotenv = "*"
 pymongo = "*"
 flask = {extras = ["async"], version = "*"}
+build = "*"
+setuptools = "*"
+twine = "*"
+waitress = "*"
+eventlet = "*"
 
 [dev-packages]
 build = "*"

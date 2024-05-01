@@ -4,7 +4,7 @@
 
 import pytest
 from flask_socketio import SocketIOTestClient
-from app import create_app, end_mgd, socketio
+from fizzbuzz_draw.app import create_app, end_mgd, socketio
 
 
 class Tests:

@@ -9,8 +9,8 @@ from flask_socketio import SocketIO, emit, join_room
 from bson import json_util, objectid
 from flask import Flask, render_template, session, request, redirect, url_for
 from dotenv import dotenv_values
-from nested_collections import NestedCollection
-from setup_mg import end_mgd, start_mgd
+from src.fizzbuzz_draw.nested_collections import NestedCollection
+from src.fizzbuzz_draw.setup_mg import end_mgd, start_mgd
 
 config = dotenv_values(".env")
 
@@ -356,8 +356,12 @@ def create_app():  # pylint: disable=too-many-statements
     return app
 
 
-if __name__ == "__main__":
+def main():
+    """Main"""
     flask_app = create_app()
-    socketio.run(
-        flask_app, host="0.0.0.0", port=config["WEBAPP_FLASK_PORT"], debug=True
-    )
+    socketio.run(flask_app, host="0.0.0.0", port=config["WEBAPP_FLASK_PORT"])
+    return flask_app
+
+
+if __name__ == "__main__":
+    main()
