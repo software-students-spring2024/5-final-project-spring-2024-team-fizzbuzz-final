@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', main);
 
 function main() {
-    let socket = io.connect('/play');
+    let socket = io.connect('/play', {transports: ['websocket']});
     let isDrawing = false;
     let lastX, lastY;
     let path = null;
