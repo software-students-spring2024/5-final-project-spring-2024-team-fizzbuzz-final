@@ -40,6 +40,8 @@ ADD . .
 
 RUN pip3 install fizzbuzz-draw
 
+RUN echo "hello"
+
 # expose the port that the Flask app is running on... by default 80
 EXPOSE 8080
 
