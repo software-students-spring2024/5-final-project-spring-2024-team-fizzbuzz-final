@@ -9,8 +9,7 @@ function main() {
 
     socket.on('ready', function(data) {
         console.log(data.message);
-        while (true) {
-            window.location.replace('/play');
-        }
+
+        window.location.replace('/play');
     });
 };
