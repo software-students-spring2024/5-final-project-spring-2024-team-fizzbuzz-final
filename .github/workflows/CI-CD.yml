@@ -57,8 +57,9 @@ jobs:
           pipenv install
       - name: Build package
         run: |
+          ls -a
           pipenv install build
-          pipenv run python -m build
+          pipenv run python -m build .
       - name: Publish to PyPI
         if: github.ref == 'refs/heads/main'
         uses: pypa/gh-action-pypi-publish@release/v1
