@@ -9,11 +9,11 @@ This project is a Flask-SocketIO web application designed for real-time communic
 
 ## Team Members
 
-[Dhiyaa Al Jorf]([url](https://github.com/DoodyShark))
+[Dhiyaa Al Jorf](https://github.com/DoodyShark)
 
-[Firas Darwish]([url](https://github.com/DoodyShark))
+[Firas Darwish](https://github.com/DoodyShark)
 
-[Shubhi Upadhyay]([url](https://github.com/shubhiupa19))
+[Shubhi Upadhyay](https://github.com/shubhiupa19)
 
 ## Docker Containers
 
