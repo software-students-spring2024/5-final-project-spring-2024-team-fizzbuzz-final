@@ -78,8 +78,9 @@ class Tests:
         assert 300 <= response.status_code < 400
 
         yield (app_c, user1)
-    
+
     def test_score(self, app_c):
+        """testing scores page"""
         user1 = app_c.test_client()
 
         user1.get("/")
@@ -273,133 +274,152 @@ class Tests:
             assert sess["room"] == "firfir"
 
     def test_canvas_clear(self, app_c):
-            """checking canvas clear"""
-            user1 = app_c.test_client()
-            user2 = app_c.test_client()
-            user3 = app_c.test_client()
-            user1.get("/")
-            user2.get("/")
-            user3.get("/")
+        """checking canvas clear"""
+        user1 = app_c.test_client()
+        user2 = app_c.test_client()
+        user3 = app_c.test_client()
+        user1.get("/")
+        user2.get("/")
+        user3.get("/")
 
-            data = {}
-            data["room"]="firfir"
-            data['theme_pack']='fruits'
-            user1.post("/join-game", data=data)
-            user2.get("/join-game?room="+data["room"])
-            user3.get("/join-game?room="+data["room"])
+        data = {}
+        data["room"] = "firfir"
+        data["theme_pack"] = "fruits"
+        user1.post("/join-game", data=data)
+        user2.get("/join-game?room=" + data["room"])
+        user3.get("/join-game?room=" + data["room"])
 
-            user1.get("/waiting-room")
-            socketio_test_client1 = socketio.test_client(app=app_c, namespace='/waiting', flask_test_client=user1)
+        user1.get("/waiting-room")
+        socketio_test_client1 = socketio.test_client(
+            app=app_c, namespace="/waiting", flask_test_client=user1
+        )
 
-            user2.get("/waiting-room")
-            socketio_test_client2 = socketio.test_client(app=app_c, namespace='/waiting', flask_test_client=user2)
+        user2.get("/waiting-room")
+        socketio.test_client(app=app_c, namespace="/waiting", flask_test_client=user2)
 
-            user3.get("/waiting-room")
-            socketio_test_client3 = socketio.test_client(app=app_c, namespace='/waiting', flask_test_client=user3)
+        user3.get("/waiting-room")
+        socketio.test_client(app=app_c, namespace="/waiting", flask_test_client=user3)
 
-            user1.get("/play")
-            user2.get("/play")
-            user3.get("/play")
+        user1.get("/play")
+        user2.get("/play")
+        user3.get("/play")
 
-            socketio_test_client1 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user1)
-            socketio_test_client2 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user2)
-            socketio_test_client3 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user3)
+        socketio_test_client1 = socketio.test_client(
+            app=app_c, namespace="/play", flask_test_client=user1
+        )
+        socketio.test_client(app=app_c, namespace="/play", flask_test_client=user2)
+        socketio.test_client(app=app_c, namespace="/play", flask_test_client=user3)
 
-            socketio_test_client1.emit('canvas_cleared', namespace='/play')
+        socketio_test_client1.emit("canvas_cleared", namespace="/play")
 
-            lst = socketio_test_client1.get_received(namespace='/play')
+        lst = socketio_test_client1.get_received(namespace="/play")
 
-
-            assert lst[-1]['name'] == 'canvas_cleared'
+        assert lst[-1]["name"] == "canvas_cleared"
 
     def test_drawing(self, app_c):
-            """checking drawing"""
-            user1 = app_c.test_client()
-            user2 = app_c.test_client()
-            user3 = app_c.test_client()
-            user1.get("/")
-            user2.get("/")
-            user3.get("/")
+        """checking drawing"""
+        user1 = app_c.test_client()
+        user2 = app_c.test_client()
+        user3 = app_c.test_client()
+        user1.get("/")
+        user2.get("/")
+        user3.get("/")
 
-            data = {}
-            data["room"]="firfir"
-            data['theme_pack']='fruits'
-            user1.post("/join-game", data=data)
-            user2.get("/join-game?room="+data["room"])
-            user3.get("/join-game?room="+data["room"])
+        data = {}
+        data["room"] = "firfir"
+        data["theme_pack"] = "fruits"
+        user1.post("/join-game", data=data)
+        user2.get("/join-game?room=" + data["room"])
+        user3.get("/join-game?room=" + data["room"])
 
-            user1.get("/waiting-room")
-            socketio_test_client1 = socketio.test_client(app=app_c, namespace='/waiting', flask_test_client=user1)
+        user1.get("/waiting-room")
+        socketio_test_client1 = socketio.test_client(
+            app=app_c, namespace="/waiting", flask_test_client=user1
+        )
 
-            user2.get("/waiting-room")
-            socketio_test_client2 = socketio.test_client(app=app_c, namespace='/waiting', flask_test_client=user2)
+        user2.get("/waiting-room")
+        socketio.test_client(app=app_c, namespace="/waiting", flask_test_client=user2)
 
-            user3.get("/waiting-room")
-            socketio_test_client3 = socketio.test_client(app=app_c, namespace='/waiting', flask_test_client=user3)
+        user3.get("/waiting-room")
+        socketio.test_client(app=app_c, namespace="/waiting", flask_test_client=user3)
 
-            user1.get("/play")
-            user2.get("/play")
-            user3.get("/play")
+        user1.get("/play")
+        user2.get("/play")
+        user3.get("/play")
 
-            socketio_test_client1 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user1)
-            socketio_test_client2 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user2)
-            socketio_test_client3 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user3)
+        socketio_test_client1 = socketio.test_client(
+            app=app_c, namespace="/play", flask_test_client=user1
+        )
+        socketio.test_client(app=app_c, namespace="/play", flask_test_client=user2)
+        socketio.test_client(app=app_c, namespace="/play", flask_test_client=user3)
 
-            socketio_test_client1.emit('drawing', {}, namespace='/play')
+        socketio_test_client1.emit("drawing", {}, namespace="/play")
 
-            lst = socketio_test_client1.get_received(namespace='/play')
+        lst = socketio_test_client1.get_received(namespace="/play")
 
-            assert lst[-1]['name'] == 'prompt'
+        assert lst[-1]["name"] == "prompt"
 
     def test_guess(self, app_c):
-            """ testing """
-            user1 = app_c.test_client()
-            user2 = app_c.test_client()
-            user3 = app_c.test_client()
-            user1.get("/")
-            user2.get("/")
-            user3.get("/")
+        """testing"""
+        user1 = app_c.test_client()
+        user2 = app_c.test_client()
+        user3 = app_c.test_client()
+        user1.get("/")
+        user2.get("/")
+        user3.get("/")
 
-            data = {}
-            data["room"]="firfir"
-            data['theme_pack']='fruits'
-            user1.post("/join-game", data=data)
-            user2.get("/join-game?room="+data["room"])
-            user3.get("/join-game?room="+data["room"])
+        data = {}
+        data["room"] = "firfir"
+        data["theme_pack"] = "fruits"
+        user1.post("/join-game", data=data)
+        user2.get("/join-game?room=" + data["room"])
+        user3.get("/join-game?room=" + data["room"])
 
-            user1.get("/waiting-room")
-            socketio_test_client1 = socketio.test_client(app=app_c, namespace='/waiting', flask_test_client=user1)
+        user1.get("/waiting-room")
+        socketio_test_client1 = socketio.test_client(
+            app=app_c, namespace="/waiting", flask_test_client=user1
+        )
 
-            user2.get("/waiting-room")
-            socketio_test_client2 = socketio.test_client(app=app_c, namespace='/waiting', flask_test_client=user2)
+        user2.get("/waiting-room")
+        socketio_test_client2 = socketio.test_client(
+            app=app_c, namespace="/waiting", flask_test_client=user2
+        )
 
-            user3.get("/waiting-room")
-            socketio_test_client3 = socketio.test_client(app=app_c, namespace='/waiting', flask_test_client=user3)
+        user3.get("/waiting-room")
+        socketio.test_client(app=app_c, namespace="/waiting", flask_test_client=user3)
+
+        user1.get("/play")
+        user2.get("/play")
+        user3.get("/play")
+
+        socketio_test_client1 = socketio.test_client(
+            app=app_c, namespace="/play", flask_test_client=user1
+        )
+        socketio_test_client2 = socketio.test_client(
+            app=app_c, namespace="/play", flask_test_client=user2
+        )
+        socketio.test_client(app=app_c, namespace="/play", flask_test_client=user3)
+
+        for _ in range(2):
+            socketio_test_client1.emit("guessed", {"skipped": False}, namespace="/play")
+            socketio_test_client2.emit("guessed", {"skipped": False}, namespace="/play")
+            lst_i = socketio_test_client1.get_received(namespace="/play")
+            print(lst_i)
+            assert lst_i[-1]["name"] == "next-round"
 
             user1.get("/play")
             user2.get("/play")
             user3.get("/play")
+            socketio_test_client1 = socketio.test_client(
+                app=app_c, namespace="/play", flask_test_client=user1
+            )
+            socketio_test_client2 = socketio.test_client(
+                app=app_c, namespace="/play", flask_test_client=user2
+            )
+            socketio.test_client(app=app_c, namespace="/play", flask_test_client=user3)
 
-            socketio_test_client1 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user1)
-            socketio_test_client2 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user2)
-            socketio_test_client3 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user3)
-            
-            for i in range(2):
-                socketio_test_client1.emit("guessed", {"skipped":False}, namespace='/play')
-                socketio_test_client2.emit("guessed", {"skipped":False}, namespace='/play')
-                lst_i = socketio_test_client1.get_received(namespace='/play')
-                print(lst_i)
-                assert lst_i[-1]['name'] == 'next-round'
-
-                user1.get("/play")
-                user2.get("/play")
-                user3.get("/play")
-                socketio_test_client1 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user1)
-                socketio_test_client2 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user2)
-                socketio_test_client3 = socketio.test_client(app=app_c, namespace='/play', flask_test_client=user3)
-            
-            socketio_test_client1.emit("guessed", {"skipped":False}, namespace='/play')
-            socketio_test_client2.emit("guessed", {"skipped":False}, namespace='/play')
-            lst_i = socketio_test_client1.get_received(namespace='/play')
-            print(lst_i)
-            assert lst_i[-1]['name'] == 'scores'
+        socketio_test_client1.emit("guessed", {"skipped": False}, namespace="/play")
+        socketio_test_client2.emit("guessed", {"skipped": False}, namespace="/play")
+        lst_i = socketio_test_client1.get_received(namespace="/play")
+        print(lst_i)
+        assert lst_i[-1]["name"] == "scores"

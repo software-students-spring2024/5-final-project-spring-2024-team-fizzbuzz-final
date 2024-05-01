@@ -50,6 +50,7 @@ def add_default_themes(se5_db):
         }
     )
 
+
 def start_mgd(se5_db):
     """
     set up collections
