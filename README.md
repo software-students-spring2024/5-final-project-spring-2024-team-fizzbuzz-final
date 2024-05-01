@@ -35,7 +35,7 @@ Follow these instructions to run a copy of the project on your local machine.
    cd 5-final-project-spring-2024-team-fizzbuzz-final
    
 2.  **Create a .env file in the root of the directory with the following contents**
-   ```
+   ```bash
    MONGODB_USER=your_mongodb_user
    MONGODB_PASSWORD=your_mongodb_password
    MONGODB_HOST=your_mongodb_host
