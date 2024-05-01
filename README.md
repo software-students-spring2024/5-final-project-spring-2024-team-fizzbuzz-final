@@ -48,7 +48,7 @@ Follow these instructions to run a copy of the project on your local machine.
    WEBAPP_FLASK_APP = app.py
    ```
 
-4. **Running with Docker**
+3. **Running with Docker**
    To run the project, use
    ```bash
    docker-compose up --build
