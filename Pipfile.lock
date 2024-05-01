@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f425fec83b388372a5c788c733f8c3f1bb77b39cfb51c2ea3d7dfdc7a816d91d"
+            "sha256": "f0f40527b978a88d06aa7fc71229e55d30de1dbcfb875be3fb98ef8d606c2b9c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -275,8 +275,13 @@
             "version": "==0.36.1"
         },
         "fizzbuzz-draw": {
-            "editable": true,
-            "file": "."
+            "hashes": [
+                "sha256:63f558c389b0f937197192e0f41a37d459dcf7cd9bd90b0bd1b9759ea8cbb971",
+                "sha256:b074af5066c036937a1199d3984f94885c5c1ec578248b4395fb0eb5aa6196fd"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.9'",
+            "version": "==1.0.2"
         },
         "flask": {
             "extras": [

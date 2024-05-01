@@ -40,10 +40,8 @@ ADD . .
 
 RUN pip3 install fizzbuzz-draw
 
-RUN pip3 install waitress
-
 # expose the port that the Flask app is running on... by default 80
 EXPOSE 8080
 
 # Run app.py when the container launches
-CMD [ "python", "-m", "fizzbuzz_draw.__main__:main"]
+CMD [ "python", "-m", "fizzbuzz_draw"]
