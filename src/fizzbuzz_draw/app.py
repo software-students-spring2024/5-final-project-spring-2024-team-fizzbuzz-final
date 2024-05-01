@@ -15,7 +15,7 @@ from src.fizzbuzz_draw.setup_mg import end_mgd, start_mgd
 config = dotenv_values(".env")
 
 ## create a socketio object
-socketio = SocketIO()
+socketio = SocketIO(ping_timeout=60*10, ping_interval=60)
 
 ROOM_SIZE = 3
 
@@ -366,7 +366,6 @@ def main():
         debug=True,
         use_reloader=True,
     )
-    # return flask_app
 
 
 if __name__ == "__main__":
