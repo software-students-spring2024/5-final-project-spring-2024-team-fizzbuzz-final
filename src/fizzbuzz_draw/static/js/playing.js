@@ -43,7 +43,9 @@ function main() {
     });
 
     socket.on("next-round", function(data) {
-        location.reload();
+        while (true) {
+            location.reload();
+        }
     })
 
     socket.on("scores", function(data) {
