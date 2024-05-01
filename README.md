@@ -30,9 +30,9 @@ Follow these instructions to run a copy of the project on your local machine.
 
    cd 5-final-project-spring-2024-team-fizzbuzz-final
    
-3.  ** Create a .env file in the root of the directory with the following contents
+3.  **Create a .env file in the root of the directory with the following contents**
    insert MongoDB credentials here
-4. ** Running with Docker **
+4. **Running with Docker**
    To run the project, use
    ```bash
    docker-compose up --build
