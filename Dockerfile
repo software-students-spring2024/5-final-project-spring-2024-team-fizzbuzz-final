@@ -46,4 +46,4 @@ RUN pip3 install waitress
 EXPOSE 8080
 
 # Run app.py when the container launches
-CMD [ "waitress-serve", "--call", "fizzbuzz_draw.__main__:main"]
+CMD [ "python", "-m", "fizzbuzz_draw.__main__:main"]

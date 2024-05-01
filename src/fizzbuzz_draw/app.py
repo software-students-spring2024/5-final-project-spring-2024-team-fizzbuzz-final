@@ -360,7 +360,7 @@ def main():
     """Main"""
     flask_app = create_app()
     socketio.run(flask_app, host="0.0.0.0", port=config["WEBAPP_FLASK_PORT"])
-    return flask_app
+    # return flask_app
 
 
 if __name__ == "__main__":

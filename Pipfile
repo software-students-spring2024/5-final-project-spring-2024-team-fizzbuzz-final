@@ -15,6 +15,7 @@ twine = "*"
 waitress = "*"
 eventlet = "*"
 fizzbuzz-draw = {file = ".", editable = true}
+gevent = "*"
 
 [dev-packages]
 build = "*"

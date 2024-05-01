@@ -5,7 +5,7 @@ from src.fizzbuzz_draw import app
 
 def main():
     """main function"""
-    return app.main()
+    app.main()
 
 
 if __name__ == "__main__":
